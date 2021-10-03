@@ -3,6 +3,7 @@ extends KinematicBody
 # This script handles player controls and interactions such as movement
 
 onready var playerCamera = $CameraPivot/Camera
+onready var interactRaycast = $InteractRayCast
 
 var velocity = Vector3()
 var maxSpeed = 5
@@ -11,13 +12,47 @@ const GRAVITY = -30
 var mouseSensitivity = 0.003 # radians/pixel, for each pixel the mouse moves, camera rotates by 0.003 radians
 var usingController = false
 
+var selectedWorkstation = null
+var activeWorkstation = null
+
+func _process(delta):
+	if activeWorkstation == null:
+		if interactRaycast.is_colliding():
+			if selectedWorkstation != null && interactRaycast.get_collider() != selectedWorkstation:
+				selectedWorkstation.isSelected = false
+			selectedWorkstation = interactRaycast.get_collider()
+			selectedWorkstation.isSelected = true
+		else:
+			if selectedWorkstation != null:
+				selectedWorkstation.isSelected = false
+
+
 func _physics_process(delta):
-	velocity.y += GRAVITY * delta
-	var targetVelocity = handleMoveInput() * maxSpeed
-	velocity.x = targetVelocity.x
-	velocity.z = targetVelocity.z
-	
-	velocity = move_and_slide(velocity, Vector3.UP, true)
+	if activeWorkstation == null:
+		velocity.y += GRAVITY * delta
+		var targetVelocity = handleMoveInput() * maxSpeed
+		velocity.x = targetVelocity.x
+		velocity.z = targetVelocity.z
+		
+		velocity = move_and_slide(velocity, Vector3.UP, true)
+
+
+func _unhandled_input(event):
+	if activeWorkstation == null:
+		if event is InputEventMouseMotion && Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+			rotate_y(-event.relative.x * mouseSensitivity)
+			$CameraPivot.rotate_x(-event.relative.y * mouseSensitivity)
+			$CameraPivot.rotation.x = clamp($CameraPivot.rotation.x, -1.2, 1.2)
+		
+	if event.is_action_pressed("interact"):
+		if selectedWorkstation != null && activeWorkstation == null:
+			activeWorkstation = selectedWorkstation
+			selectedWorkstation.isActive = true;
+			selectedWorkstation.onActive()
+	if event.is_action_pressed("ui_cancel") && activeWorkstation != null:
+		selectedWorkstation.isActive = false;
+		activeWorkstation = null
+		playerCamera.current = true
 
 
 func handleMoveInput() -> Vector3:
@@ -44,8 +79,4 @@ func handleMoveInput() -> Vector3:
 	return moveVector
 	
 
-func _unhandled_input(event):
-	if event is InputEventMouseMotion && Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
-		rotate_y(-event.relative.x * mouseSensitivity)
-		$CameraPivot.rotate_x(-event.relative.y * mouseSensitivity)
-		$CameraPivot.rotation.x = clamp($CameraPivot.rotation.x, -1.2, 1.2)
+
