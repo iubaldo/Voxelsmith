@@ -3,13 +3,14 @@ extends "res://Scripts/Interactable.gd"
 # if interacted with, switch to this camera
 # forging code here
 
-onready var label3D = $Sprite3D
+onready var label3D = $Label3D
 onready var workstationCamera = $Camera
 
 func _process(delta):
-	if !isActive:
-		label3D.visible = true if isSelected else false
+	label3D.visible = true if (isSelected && !isActive) else false
+	pass
 
 
-func onActive():
+func onActive() -> void:
 	workstationCamera.current = true
+	pass

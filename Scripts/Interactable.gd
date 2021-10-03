@@ -8,3 +8,6 @@ func _process(delta):
 
 func onActive():
 	pass
+
+func onDeactive():
+	pass

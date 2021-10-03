@@ -1,0 +1,404 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Scenes/Smithing/Subvoxel.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Materials/Voxel/SelectionMat.tres" type="Material" id=2]
+
+[sub_resource type="CubeMesh" id=1]
+material = ExtResource( 2 )
+size = Vector3( 5, 5, 5 )
+
+[node name="Voxel" type="Spatial"]
+transform = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0 )
+
+[node name="Layer 0" type="Spatial" parent="."]
+
+[node name="Subvoxel0" parent="Layer 0" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -2, -2 )
+
+[node name="Subvoxel1" parent="Layer 0" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -2, -2 )
+
+[node name="Subvoxel2" parent="Layer 0" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, -2 )
+
+[node name="Subvoxel3" parent="Layer 0" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, -2 )
+
+[node name="Subvoxel4" parent="Layer 0" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -2, -2 )
+
+[node name="Subvoxel5" parent="Layer 0" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -2, -1 )
+
+[node name="Subvoxel6" parent="Layer 0" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -2, -1 )
+
+[node name="Subvoxel7" parent="Layer 0" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, -1 )
+
+[node name="Subvoxel8" parent="Layer 0" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, -1 )
+
+[node name="Subvoxel9" parent="Layer 0" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -2, -1 )
+
+[node name="Subvoxel10" parent="Layer 0" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -2, 0 )
+
+[node name="Subvoxel11" parent="Layer 0" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -2, 0 )
+
+[node name="Subvoxel12" parent="Layer 0" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0 )
+
+[node name="Subvoxel13" parent="Layer 0" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, 0 )
+
+[node name="Subvoxel14" parent="Layer 0" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -2, 0 )
+
+[node name="Subvoxel15" parent="Layer 0" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -2, 1 )
+
+[node name="Subvoxel16" parent="Layer 0" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -2, 1 )
+
+[node name="Subvoxel17" parent="Layer 0" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 1 )
+
+[node name="Subvoxel18" parent="Layer 0" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, 1 )
+
+[node name="Subvoxel19" parent="Layer 0" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -2, 1 )
+
+[node name="Subvoxel20" parent="Layer 0" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -2, 2 )
+
+[node name="Subvoxel21" parent="Layer 0" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -2, 2 )
+
+[node name="Subvoxel22" parent="Layer 0" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 2 )
+
+[node name="Subvoxel23" parent="Layer 0" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, 2 )
+
+[node name="Subvoxel24" parent="Layer 0" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -2, 2 )
+
+[node name="Layer 1" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
+
+[node name="Subvoxel0" parent="Layer 1" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -2, -2 )
+
+[node name="Subvoxel1" parent="Layer 1" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -2, -2 )
+
+[node name="Subvoxel2" parent="Layer 1" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, -2 )
+
+[node name="Subvoxel3" parent="Layer 1" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, -2 )
+
+[node name="Subvoxel4" parent="Layer 1" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -2, -2 )
+
+[node name="Subvoxel5" parent="Layer 1" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -2, -1 )
+
+[node name="Subvoxel6" parent="Layer 1" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -2, -1 )
+
+[node name="Subvoxel7" parent="Layer 1" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, -1 )
+
+[node name="Subvoxel8" parent="Layer 1" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, -1 )
+
+[node name="Subvoxel9" parent="Layer 1" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -2, -1 )
+
+[node name="Subvoxel10" parent="Layer 1" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -2, 0 )
+
+[node name="Subvoxel11" parent="Layer 1" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -2, 0 )
+
+[node name="Subvoxel12" parent="Layer 1" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0 )
+
+[node name="Subvoxel13" parent="Layer 1" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, 0 )
+
+[node name="Subvoxel14" parent="Layer 1" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -2, 0 )
+
+[node name="Subvoxel15" parent="Layer 1" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -2, 1 )
+
+[node name="Subvoxel16" parent="Layer 1" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -2, 1 )
+
+[node name="Subvoxel17" parent="Layer 1" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 1 )
+
+[node name="Subvoxel18" parent="Layer 1" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, 1 )
+
+[node name="Subvoxel19" parent="Layer 1" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -2, 1 )
+
+[node name="Subvoxel20" parent="Layer 1" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -2, 2 )
+
+[node name="Subvoxel21" parent="Layer 1" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -2, 2 )
+
+[node name="Subvoxel22" parent="Layer 1" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 2 )
+
+[node name="Subvoxel23" parent="Layer 1" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, 2 )
+
+[node name="Subvoxel24" parent="Layer 1" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -2, 2 )
+
+[node name="Layer 2" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0 )
+
+[node name="Subvoxel0" parent="Layer 2" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -2, -2 )
+
+[node name="Subvoxel1" parent="Layer 2" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -2, -2 )
+
+[node name="Subvoxel2" parent="Layer 2" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, -2 )
+
+[node name="Subvoxel3" parent="Layer 2" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, -2 )
+
+[node name="Subvoxel4" parent="Layer 2" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -2, -2 )
+
+[node name="Subvoxel5" parent="Layer 2" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -2, -1 )
+
+[node name="Subvoxel6" parent="Layer 2" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -2, -1 )
+
+[node name="Subvoxel7" parent="Layer 2" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, -1 )
+
+[node name="Subvoxel8" parent="Layer 2" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, -1 )
+
+[node name="Subvoxel9" parent="Layer 2" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -2, -1 )
+
+[node name="Subvoxel10" parent="Layer 2" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -2, 0 )
+
+[node name="Subvoxel11" parent="Layer 2" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -2, 0 )
+
+[node name="Subvoxel12" parent="Layer 2" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0 )
+
+[node name="Subvoxel13" parent="Layer 2" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, 0 )
+
+[node name="Subvoxel14" parent="Layer 2" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -2, 0 )
+
+[node name="Subvoxel15" parent="Layer 2" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -2, 1 )
+
+[node name="Subvoxel16" parent="Layer 2" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -2, 1 )
+
+[node name="Subvoxel17" parent="Layer 2" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 1 )
+
+[node name="Subvoxel18" parent="Layer 2" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, 1 )
+
+[node name="Subvoxel19" parent="Layer 2" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -2, 1 )
+
+[node name="Subvoxel20" parent="Layer 2" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -2, 2 )
+
+[node name="Subvoxel21" parent="Layer 2" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -2, 2 )
+
+[node name="Subvoxel22" parent="Layer 2" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 2 )
+
+[node name="Subvoxel23" parent="Layer 2" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, 2 )
+
+[node name="Subvoxel24" parent="Layer 2" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -2, 2 )
+
+[node name="Layer 3" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0 )
+
+[node name="Subvoxel0" parent="Layer 3" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -2, -2 )
+
+[node name="Subvoxel1" parent="Layer 3" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -2, -2 )
+
+[node name="Subvoxel2" parent="Layer 3" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, -2 )
+
+[node name="Subvoxel3" parent="Layer 3" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, -2 )
+
+[node name="Subvoxel4" parent="Layer 3" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -2, -2 )
+
+[node name="Subvoxel5" parent="Layer 3" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -2, -1 )
+
+[node name="Subvoxel6" parent="Layer 3" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -2, -1 )
+
+[node name="Subvoxel7" parent="Layer 3" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, -1 )
+
+[node name="Subvoxel8" parent="Layer 3" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, -1 )
+
+[node name="Subvoxel9" parent="Layer 3" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -2, -1 )
+
+[node name="Subvoxel10" parent="Layer 3" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -2, 0 )
+
+[node name="Subvoxel11" parent="Layer 3" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -2, 0 )
+
+[node name="Subvoxel12" parent="Layer 3" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0 )
+
+[node name="Subvoxel13" parent="Layer 3" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, 0 )
+
+[node name="Subvoxel14" parent="Layer 3" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -2, 0 )
+
+[node name="Subvoxel15" parent="Layer 3" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -2, 1 )
+
+[node name="Subvoxel16" parent="Layer 3" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -2, 1 )
+
+[node name="Subvoxel17" parent="Layer 3" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 1 )
+
+[node name="Subvoxel18" parent="Layer 3" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, 1 )
+
+[node name="Subvoxel19" parent="Layer 3" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -2, 1 )
+
+[node name="Subvoxel20" parent="Layer 3" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -2, 2 )
+
+[node name="Subvoxel21" parent="Layer 3" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -2, 2 )
+
+[node name="Subvoxel22" parent="Layer 3" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 2 )
+
+[node name="Subvoxel23" parent="Layer 3" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, 2 )
+
+[node name="Subvoxel24" parent="Layer 3" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -2, 2 )
+
+[node name="Layer 4" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0 )
+
+[node name="Subvoxel0" parent="Layer 4" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -2, -2 )
+
+[node name="Subvoxel1" parent="Layer 4" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -2, -2 )
+
+[node name="Subvoxel2" parent="Layer 4" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, -2 )
+
+[node name="Subvoxel3" parent="Layer 4" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, -2 )
+
+[node name="Subvoxel4" parent="Layer 4" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -2, -2 )
+
+[node name="Subvoxel5" parent="Layer 4" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -2, -1 )
+
+[node name="Subvoxel6" parent="Layer 4" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -2, -1 )
+
+[node name="Subvoxel7" parent="Layer 4" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, -1 )
+
+[node name="Subvoxel8" parent="Layer 4" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, -1 )
+
+[node name="Subvoxel9" parent="Layer 4" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -2, -1 )
+
+[node name="Subvoxel10" parent="Layer 4" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -2, 0 )
+
+[node name="Subvoxel11" parent="Layer 4" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -2, 0 )
+
+[node name="Subvoxel12" parent="Layer 4" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0 )
+
+[node name="Subvoxel13" parent="Layer 4" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, 0 )
+
+[node name="Subvoxel14" parent="Layer 4" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -2, 0 )
+
+[node name="Subvoxel15" parent="Layer 4" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -2, 1 )
+
+[node name="Subvoxel16" parent="Layer 4" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -2, 1 )
+
+[node name="Subvoxel17" parent="Layer 4" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 1 )
+
+[node name="Subvoxel18" parent="Layer 4" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, 1 )
+
+[node name="Subvoxel19" parent="Layer 4" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -2, 1 )
+
+[node name="Subvoxel20" parent="Layer 4" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -2, 2 )
+
+[node name="Subvoxel21" parent="Layer 4" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -2, 2 )
+
+[node name="Subvoxel22" parent="Layer 4" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 2 )
+
+[node name="Subvoxel23" parent="Layer 4" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, 2 )
+
+[node name="Subvoxel24" parent="Layer 4" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -2, 2 )
+
+[node name="OutlineMesh" type="MeshInstance" parent="."]
+mesh = SubResource( 1 )
+material/0 = null

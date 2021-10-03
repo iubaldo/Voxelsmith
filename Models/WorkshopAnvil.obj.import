@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/WorkshopAnvil.obj-315bd6e7e4d294736e55582d6d4d9151.mesh"
+
+[deps]
+
+files=[ "res://.import/WorkshopAnvil.obj-315bd6e7e4d294736e55582d6d4d9151.mesh" ]
+
+source_file="res://Models/WorkshopAnvil.obj"
+dest_files=[ "res://.import/WorkshopAnvil.obj-315bd6e7e4d294736e55582d6d4d9151.mesh", "res://.import/WorkshopAnvil.obj-315bd6e7e4d294736e55582d6d4d9151.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true

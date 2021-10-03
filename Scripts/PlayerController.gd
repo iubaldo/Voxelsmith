@@ -25,6 +25,7 @@ func _process(delta):
 		else:
 			if selectedWorkstation != null:
 				selectedWorkstation.isSelected = false
+	pass
 
 
 func _physics_process(delta):
@@ -35,6 +36,7 @@ func _physics_process(delta):
 		velocity.z = targetVelocity.z
 		
 		velocity = move_and_slide(velocity, Vector3.UP, true)
+	pass
 
 
 func _unhandled_input(event):
@@ -47,12 +49,14 @@ func _unhandled_input(event):
 	if event.is_action_pressed("interact"):
 		if selectedWorkstation != null && activeWorkstation == null:
 			activeWorkstation = selectedWorkstation
-			selectedWorkstation.isActive = true;
+			selectedWorkstation.isActive = true
 			selectedWorkstation.onActive()
 	if event.is_action_pressed("ui_cancel") && activeWorkstation != null:
-		selectedWorkstation.isActive = false;
+		selectedWorkstation.isActive = false
+		activeWorkstation.onDeactive()
 		activeWorkstation = null
 		playerCamera.current = true
+pass
 
 
 func handleMoveInput() -> Vector3:
