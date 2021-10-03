@@ -1,0 +1,13 @@
+[remap]
+
+importer="image"
+type="Image"
+path="res://.import/White-Square.jpg-84d4197ec75761905a5e78abc7a289d9.image"
+
+[deps]
+
+source_file="res://Sprites/White-Square.jpg"
+dest_files=[ "res://.import/White-Square.jpg-84d4197ec75761905a5e78abc7a289d9.image" ]
+
+[params]
+

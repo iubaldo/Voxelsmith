@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/VoxelsmithForge-0-forge.obj-4f62ce38ae5b1d4030b050aae8950491.mesh"
+
+[deps]
+
+files=[ "res://.import/VoxelsmithForge-0-forge.obj-4f62ce38ae5b1d4030b050aae8950491.mesh" ]
+
+source_file="res://Models/VoxelsmithForge-0-forge.obj"
+dest_files=[ "res://.import/VoxelsmithForge-0-forge.obj-4f62ce38ae5b1d4030b050aae8950491.mesh", "res://.import/VoxelsmithForge-0-forge.obj-4f62ce38ae5b1d4030b050aae8950491.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true
