@@ -6,6 +6,7 @@ export onready var material: MaterialType # determines what type of material is 
 var matName: String
 
 # these attributes can change during smithing
+var heat: int = 0 # the material's current heat level
 var hardness: int # range (1, 100), determines max sharpness
 var density: int # range (1, 100), determines hammer strength required to shape
 var weight: int # range (1, 100), determines final product's weight by (final weight = # of subvoxels * 0.04 * weight * density)

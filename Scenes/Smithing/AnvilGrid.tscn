@@ -9,4 +9,4 @@ transform = Transform( 0.39, 0, 0, 0, -1.70474e-08, -1, 0, 0.39, -4.37114e-08, 0
 modulate = Color( 0.239216, 0.737255, 0.835294, 1 )
 texture = ExtResource( 1 )
 region_enabled = true
-region_rect = Rect2( 0, 0, 1792, 3584 )
+region_rect = Rect2( 0, 0, 1792, 3840 )
