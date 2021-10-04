@@ -1,16 +1,19 @@
 extends Node
+class_name Subvoxel
+# note: subvoxels should inherit their material from their parent voxel
 
+onready var outlineMesh = $OutlineMesh
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
+var parent: Voxel
 
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+# note: these should only call when subvoxelMode is true and anvil is active
+func _on_SubvoxelHitbox_mouse_entered():
+	if WorkshopAnvil.subvoxelMode && WorkshopAnvil.isActive:
+		WorkshopAnvil.selectedSubvoxel = self
+		outlineMesh.visible = true
+	pass
+func _on_SubvoxelHitbox_mouse_exited():
+	if WorkshopAnvil.subvoxelMode && WorkshopAnvil.isActive:
+		WorkshopAnvil.selectedSubvoxel = self
+		outlineMesh.visible = false
+	pass

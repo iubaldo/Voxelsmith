@@ -1,6 +1,7 @@
 extends KinematicBody
 
 # This script handles player controls and interactions such as movement
+# note: does not govern controls for workstations
 
 onready var playerCamera = $CameraPivot/Camera
 onready var interactRaycast = $InteractRayCast
@@ -56,7 +57,7 @@ func _unhandled_input(event):
 		activeWorkstation.onDeactive()
 		activeWorkstation = null
 		playerCamera.current = true
-pass
+	pass
 
 
 func handleMoveInput() -> Vector3:
@@ -81,6 +82,3 @@ func handleMoveInput() -> Vector3:
 		
 	moveVector = moveVector.normalized()
 	return moveVector
-	
-
-

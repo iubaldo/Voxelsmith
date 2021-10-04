@@ -15,9 +15,29 @@ _global_script_classes=[ {
 "path": "res://Scripts/Smithing/Materials/ForgingMaterial.gd"
 }, {
 "base": "Node",
+"class": "Ingot",
+"language": "GDScript",
+"path": "res://Scripts/Smithing/Ingot.gd"
+}, {
+"base": "Node",
 "class": "Interactable",
 "language": "GDScript",
 "path": "res://Scripts/Interactable.gd"
+}, {
+"base": "Node",
+"class": "PatternGrid",
+"language": "GDScript",
+"path": "res://Scripts/Smithing/PatternGrid.gd"
+}, {
+"base": "Node",
+"class": "SmithingGrid",
+"language": "GDScript",
+"path": "res://Scripts/Smithing/SmithingGrid.gd"
+}, {
+"base": "Node",
+"class": "Subvoxel",
+"language": "GDScript",
+"path": "res://Scripts/Smithing/Voxels/Subvoxel.gd"
 }, {
 "base": "Spatial",
 "class": "Voxel",
@@ -26,7 +46,11 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "ForgingMaterial": "",
+"Ingot": "",
 "Interactable": "",
+"PatternGrid": "",
+"SmithingGrid": "",
+"Subvoxel": "",
 "Voxel": ""
 }
 
@@ -39,6 +63,7 @@ config/icon="res://icon.png"
 [autoload]
 
 MaterialType="*res://Scripts/Smithing/Materials/MaterialType.gd"
+WorkshopAnvil="*res://Scripts/WorkshopAnvil.gd"
 
 [global]
 
@@ -82,6 +107,8 @@ freeMouse={
 3d_physics/layer_1="Player"
 3d_physics/layer_2="Environment"
 3d_physics/layer_3="Interactable"
+3d_physics/layer_4="Voxel"
+3d_physics/layer_5="Subvoxel"
 
 [physics]
 

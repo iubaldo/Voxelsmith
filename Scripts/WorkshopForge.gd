@@ -6,6 +6,7 @@ extends Interactable
 func _ready():
 	label3D = $Label3D
 	workstationCamera = $Camera
+	pass
 
 func _process(delta):
 	label3D.visible = true if (isSelected && !isActive) else false

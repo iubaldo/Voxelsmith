@@ -1,18 +1,21 @@
 extends Node
-# contains the voxels that make up a piece of worked metal
-# note: can be carried as an item (ex. for reheating in the forge)
+class_name SmithingGrid
+# contains the physical voxels that make up a piece of worked metal
+# note: should be able to be carried as an item (ex. for reheating in the forge)
 
 export onready var forgingMat: ForgingMaterial # what kind of material the grid is using
+
+var completed: bool = false # whether or not the grid's pattern has been completed
+var voxelPool: int = 0 # how many voxels are available to be added
 
 var gridMatrix = []
 var gridBounds = Rect2(0, 0, 28, 14)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
 	pass 
 	
-func addIngot() -> void:
+func addIngot() -> void: # for adding a full ingot to a new grid
 	pass
 
 func addVoxel() -> void:

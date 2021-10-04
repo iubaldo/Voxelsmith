@@ -1,9 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Materials/Voxel/VoxelOutlineMat.tres" type="Material" id=1]
 [ext_resource path="res://Materials/Voxel/VoxelMat.tres" type="Material" id=2]
+[ext_resource path="res://Scripts/Smithing/Voxels/Subvoxel.gd" type="Script" id=3]
 
 [sub_resource type="CubeMesh" id=1]
+resource_local_to_scene = true
 material = ExtResource( 2 )
 size = Vector3( 1, 1, 1 )
 
@@ -14,17 +16,23 @@ extents = Vector3( 0.5, 0.5, 0.5 )
 size = Vector3( 1, 1, 1 )
 
 [node name="Subvoxel" type="Spatial"]
+script = ExtResource( 3 )
 
-[node name="VoxelMesh" type="MeshInstance" parent="."]
+[node name="SubvoxelMesh" type="MeshInstance" parent="."]
 mesh = SubResource( 1 )
 material/0 = null
 
-[node name="Area" type="Area" parent="VoxelMesh"]
+[node name="SubvoxelHitbox" type="Area" parent="SubvoxelMesh"]
+collision_layer = 16
+collision_mask = 0
 
-[node name="CollisionShape" type="CollisionShape" parent="VoxelMesh/Area"]
+[node name="CollisionShape" type="CollisionShape" parent="SubvoxelMesh/SubvoxelHitbox"]
 shape = SubResource( 2 )
 
 [node name="OutlineMesh" type="MeshInstance" parent="."]
 visible = false
 mesh = SubResource( 3 )
 material/0 = ExtResource( 1 )
+
+[connection signal="mouse_entered" from="SubvoxelMesh/SubvoxelHitbox" to="." method="_on_SubvoxelHitbox_mouse_entered"]
+[connection signal="mouse_exited" from="SubvoxelMesh/SubvoxelHitbox" to="." method="_on_SubvoxelHitbox_mouse_exited"]

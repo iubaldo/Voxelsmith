@@ -23,3 +23,5 @@ func _ready():
 	density = 50 # range (1, 100), determines hammer strength required to shape
 	weight = 50 # range (1, 100), determines final product's weight by (final weight = # of subvoxels * 0.04 * weight * density)
 	toughness = 50 # range (1, 100), determines final product's durability
+	
+	pass
