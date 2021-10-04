@@ -1,4 +1,8 @@
 extends Node
+class_name Interactable
+
+onready var label3D
+onready var workstationCamera
 
 var isSelected = false
 var isActive = false

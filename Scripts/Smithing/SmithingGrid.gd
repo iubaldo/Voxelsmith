@@ -1,16 +1,22 @@
 extends Node
+# contains the voxels that make up a piece of worked metal
+# note: can be carried as an item (ex. for reheating in the forge)
 
+export onready var forgingMat: ForgingMaterial # what kind of material the grid is using
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-
+var gridMatrix = []
+var gridBounds = Rect2(0, 0, 28, 14)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	
+	pass 
+	
+func addIngot() -> void:
+	pass
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func addVoxel() -> void:
+	pass
+	
+func removeVoxel(x: int, y: int) -> void:
+	pass

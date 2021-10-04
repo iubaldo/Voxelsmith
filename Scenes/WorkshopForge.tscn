@@ -48,6 +48,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.402635, -0.0531704 )
 shape = SubResource( 3 )
 
 [node name="Label3D" type="Spatial" parent="."]
+visible = false
 
 [node name="Viewport" type="Viewport" parent="Label3D"]
 size = Vector2( 209, 47 )

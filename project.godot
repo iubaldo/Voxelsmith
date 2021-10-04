@@ -8,11 +8,37 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Resource",
+"class": "ForgingMaterial",
+"language": "GDScript",
+"path": "res://Scripts/Smithing/Materials/ForgingMaterial.gd"
+}, {
+"base": "Node",
+"class": "Interactable",
+"language": "GDScript",
+"path": "res://Scripts/Interactable.gd"
+}, {
+"base": "Spatial",
+"class": "Voxel",
+"language": "GDScript",
+"path": "res://Scripts/Smithing/Voxels/Voxel.gd"
+} ]
+_global_script_class_icons={
+"ForgingMaterial": "",
+"Interactable": "",
+"Voxel": ""
+}
+
 [application]
 
 config/name="Voxelsmith"
 run/main_scene="res://Scenes/WorkshopScene.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+MaterialType="*res://Scripts/Smithing/Materials/MaterialType.gd"
 
 [global]
 
