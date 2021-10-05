@@ -6,7 +6,7 @@ extends Node
 onready var colorGradient: Gradient
 onready var temperGradient: Gradient
 
-enum matTypes { Vallum, Viridium, Ostinium, Sitrium, Albanite }
+enum materialTypes { Vallum, Viridium, Ostinium, Sitrium, Albanite }
 var matType
 
 var heatResistance: int # range(-10, 10), determines how long to heat up/cool down

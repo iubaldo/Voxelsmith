@@ -5,15 +5,16 @@ class_name Subvoxel
 onready var outlineMesh = $OutlineMesh
 
 var parent: Voxel
+var gridPosition: Vector3
 
 # note: these should only call when subvoxelMode is true and anvil is active
 func _on_SubvoxelHitbox_mouse_entered():
-	if WorkshopAnvil.subvoxelMode && WorkshopAnvil.isActive:
-		WorkshopAnvil.selectedSubvoxel = self
+	if Globals.subvoxelMode && Globals.anvilActive:
+		Globals.selectedSubvoxel = self
 		outlineMesh.visible = true
 	pass
 func _on_SubvoxelHitbox_mouse_exited():
-	if WorkshopAnvil.subvoxelMode && WorkshopAnvil.isActive:
-		WorkshopAnvil.selectedSubvoxel = self
+	if Globals.subvoxelMode && Globals.anvilActive:
+		Globals.selectedSubvoxel = self
 		outlineMesh.visible = false
 	pass

@@ -8,19 +8,19 @@ extends Interactable
 #	need to make a voxel comparison function
 
 onready var voxelTemplate = preload("res://Scenes/Smithing/Voxels/Voxel.tscn")
-onready var anvilGrid = $TransparentGrid
 onready var smithingGridTemplate = preload("res://Scenes/Smithing/SmithingGrid.tscn")
 onready var patternGridTemplate = preload("res://Scenes/Smithing/PatternGrid.tscn")
+onready var forgingMaterialTemplate = preload("res://Scripts/Smithing/Materials/ForgingMaterial.gd")
+onready var vallumTemplate = preload("res://Scripts/Smithing/Materials/Vallum.gd")
+onready var anvilGrid = $AnvilGrid
+onready var gridOrigin = $GridOrigin
 
-var smithingGrid: SmithingGrid # the currently active smithingGrid, if any
-var patternGrid: PatternGrid # the currently active patternGrid, if any
+var smithingGrid # the currently active smithingGrid, if any
+var patternGrid # the currently active patternGrid, if any
 
-var stepSize: float # constant for converting to a normalized coordinate system for voxels
+const STEP_SIZE: float = 0.1 # constant for converting to a normalized coordinate system for voxels
 
 # smithing variables
-var subvoxelMode: bool = false # whether or not to target subvoxels
-var selectedVoxel: Voxel = null
-var selectedSubvoxel: Subvoxel = null
 
 var maxStrikePower: int = 500
 var strikePower: int = 0
@@ -36,22 +36,34 @@ func _ready():
 	pass
 
 func _process(delta):
-	label3D.visible = true if (isSelected && !isActive) else false
+	if (isSelected && !isActive):
+		label3D.visible = true
+	else:
+		label3D.visible = false
+	
+	#label3D.visible = true if (isSelected && !isActive) else false
 	pass
 
 func _input(event):
+	if event.is_action_pressed("debug_addIngot"):
+		var newIngot = Ingot.new()
+		newIngot.forgingMat = forgingMaterialTemplate.new(vallumTemplate.new())
+		addIngot(newIngot)
 	pass
 
 
 func onActive() -> void:
 	workstationCamera.current = true
 	anvilGrid.visible = true
+	Globals.anvilActive = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 
 func onDeactive() -> void:
 	anvilGrid.visible = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	Globals.anvilActive = false
+	Globals.resetAnvil()
 	pass
 
 
@@ -59,12 +71,14 @@ func onDeactive() -> void:
 
 func addIngot(var ingot: Ingot) -> void:
 	if smithingGrid != null && ingot.matType == smithingGrid.matType:
-		if smithingGrid.voxelPool == 0:
-			smithingGrid.addIngot()
-		else:
-			smithingGrid.voxelPool += 10
+		smithingGrid.voxelPool += 10
 	else:
 		# create new smithingGrid using the ingot's materialType
+		smithingGrid = smithingGridTemplate.instance()
+		smithingGrid.initGrid(ingot.forgingMat)
+		add_child(smithingGrid)
+		smithingGrid.translation = gridOrigin.translation
+		smithingGrid.createIngot()
 		pass
 	pass
 

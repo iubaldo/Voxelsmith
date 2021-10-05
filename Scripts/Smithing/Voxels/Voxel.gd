@@ -7,8 +7,8 @@ onready var outlineMesh = $OutlineMesh
 
 var subvoxelMatrix = [] # 3D matrix of subvoxels
 var heat: int = 0 # the voxel's current heat value
+var gridPosition: Vector2
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	subvoxelMatrix.resize(5)				# x-dimension
 	for x in 5:
@@ -18,8 +18,10 @@ func _ready():
 			subvoxelMatrix[x][y] = []
 			subvoxelMatrix[x][y].resize(5)	# z-dimension
 			for z in 5:
-				subvoxelMatrix[x][y][z] = find_node("Layer" + x).find_node("Row" + y).find_node("Subvoxel" + z)
+				subvoxelMatrix[x][y][z] = find_node("Layer" + var2str(x))\
+				.find_node("Row" + var2str(y)).find_node("Subvoxel" + var2str(z))
 				subvoxelMatrix[x][y][z].parent = self
+				subvoxelMatrix[x][y][z].translation = Vector3(x, y, z)
 	pass
 
 
@@ -45,12 +47,12 @@ func compareVoxel(var other: Voxel) -> bool:
 
 # note: these should only call if subvoxelMode = false and anvil is active
 func _on_VoxelHitbox_mouse_entered():
-	if !WorkshopAnvil.subvoxelMode && WorkshopAnvil.isActive:
-		WorkshopAnvil.selectedVoxel = self
+	if !Globals.subvoxelMode && Globals.anvilActive:
+		Globals.selectedVoxel = self
 		outlineMesh.visible = true
 	pass
 func _on_VoxelHitbox_mouse_exited():
-	if !WorkshopAnvil.subvoxelMode:
-		WorkshopAnvil.selectedVoxel = null
+	if !Globals.subvoxelMode && Globals.anvilActive:
+		Globals.selectedVoxel = null
 		outlineMesh.visible = false
 	pass
