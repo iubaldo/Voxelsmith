@@ -11,3 +11,6 @@ func resetAnvil() -> void:
 	subvoxelMode = false
 	selectedSubvoxel = null
 	selectedVoxel = null
+
+func toggleSubvoxelMode() -> void:
+	get_tree().call_group("Subvoxels", "toggleSubvoxelCollider")

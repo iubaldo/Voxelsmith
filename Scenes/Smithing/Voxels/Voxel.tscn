@@ -484,6 +484,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, -2 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -2, -2 )
 
 [node name="VoxelHitbox" type="Area" parent="."]
+input_capture_on_drag = true
 collision_layer = 8
 collision_mask = 0
 

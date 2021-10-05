@@ -21,7 +21,7 @@ func _ready():
 				subvoxelMatrix[x][y][z] = find_node("Layer" + var2str(x))\
 				.find_node("Row" + var2str(y)).find_node("Subvoxel" + var2str(z))
 				subvoxelMatrix[x][y][z].parent = self
-				subvoxelMatrix[x][y][z].translation = Vector3(x, y, z)
+				subvoxelMatrix[x][y][z].gridPosition = Vector3(x, y, z)
 	pass
 
 

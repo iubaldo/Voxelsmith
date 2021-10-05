@@ -35,7 +35,6 @@ func addVoxel(var x: int, var z: int) -> void:
 	var newVoxel = voxelTemplate.instance()
 	add_child(newVoxel)
 	newVoxel.translation = Vector3(x * STEP_SIZE, 0, z * STEP_SIZE)
-	print("added voxel at " + var2str(Vector3(x * STEP_SIZE, 0, z * STEP_SIZE)))
 	newVoxel.forgingMat = forgingMat
 	newVoxel.gridPosition = Vector2(x, z)
 	gridMatrix[x][z] = newVoxel
