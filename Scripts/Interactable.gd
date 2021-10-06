@@ -1,4 +1,4 @@
-extends Node
+extends Spatial
 class_name Interactable
 
 onready var label3D

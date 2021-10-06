@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Fonts/Spectral-Regular.ttf" type="DynamicFontData" id=1]
+
+[sub_resource type="DynamicFont" id=1]
+size = 32
+font_data = ExtResource( 1 )
+
+[node name="SmithingUI" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StrikePowerLabel" type="Label" parent="."]
+margin_left = 30.0
+margin_right = 348.0
+margin_bottom = 61.0
+custom_fonts/font = SubResource( 1 )
+text = "Lorem Ipsum"
+valign = 1

@@ -15,7 +15,7 @@ var weight: int # range (1, 100), determines final product's weight by (final we
 var toughness: int # range (1, 100), determines final product's durability
 
 
-func _init(var mat: MaterialType):
+func _init(mat: MaterialType):
 	material = mat
 	matName = MaterialType.materialTypes.keys()[material.matType]
 	hardness = material.hardness
