@@ -16,14 +16,15 @@ var voxelPool: int = 0 # how many voxels are available to be added
 # later add support for setting max bounds when free smithing
 # note: (0, 0) = (width / 2, height / 2)
 var gridMatrix = []
-var gridWidth: int = 15
-var gridHeight: int = 7
+var gridWidth: int = 29
+var gridHeight: int = 15
 var gridCenter: Vector2 = Vector2(gridWidth / 2, gridHeight / 2)
 var gridBounds: Rect2 = Rect2(0, 0, gridWidth, gridHeight) # grid coords
 
 
 func _physics_process(delta):
-	if !Globals.anvilActive || Globals.selectedVoxel != null && Globals.selectedVoxel.gridPosition == Vector3(gridCenter.x, 0, gridCenter.y):
+	if !Globals.anvilActive || (is_instance_valid(Globals.selectedVoxel) \
+	&& Globals.selectedVoxel.gridPosition == Vector3(gridCenter.x, 0, gridCenter.y)):
 		centerVoxelOutline.visible = false
 	else:
 		centerVoxelOutline.visible = true

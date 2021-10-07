@@ -19,6 +19,9 @@ script = ExtResource( 5 )
 [node name="DirectionalLight" type="DirectionalLight" parent="Environment"]
 transform = Transform( 0.629855, -0.571458, 0.52604, 0.642689, 0.76376, 0.060178, -0.436157, 0.300176, 0.848328, 0, 11.1076, 0 )
 
+[node name="DirectionalLight2" type="DirectionalLight" parent="Environment"]
+transform = Transform( 0.719661, -0.574905, -0.389323, 0.642689, 0.76376, 0.060178, 0.262753, -0.293522, 0.919133, 0, 15.509, 0 )
+
 [node name="DemoFloor" type="StaticBody" parent="Environment"]
 
 [node name="Floor" type="MeshInstance" parent="Environment/DemoFloor"]

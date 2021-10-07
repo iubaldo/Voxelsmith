@@ -23,6 +23,9 @@ var smithingGrid # the currently active smithingGrid, if any
 var patternGrid # the currently active patternGrid, if any
 
 const STEP_SIZE: float = 0.1 # constant for converting to a normalized coordinate system for voxels
+var gridBounds: Rect2 = Rect2(-14 * STEP_SIZE, -28 * STEP_SIZE, 29 * STEP_SIZE, 49 * STEP_SIZE)
+var anvilBounds: Rect2 = Rect2(-7 * STEP_SIZE, 3 * STEP_SIZE, 15 * STEP_SIZE, 6 * STEP_SIZE)
+var pritchelHole: Rect2 = Rect2(5 * STEP_SIZE, -1 * STEP_SIZE, 1 * STEP_SIZE, 3 * STEP_SIZE)
 
 # smithing variables
 
@@ -30,10 +33,10 @@ var maxStrikePower: int = 500
 var strikePower: int = 0
 var strikePowerIncreaseRate: int = 500
 
-var pritchelHole: Rect2 = Rect2(5, -1, 1, 3)
-var voxelsRemaining: int = 0 # how many unfilled voxels in the pattern (note: a voxel counts as "filled" only if subvoxels also match pattern)
+# how many unfilled voxels in the pattern remain (note: a voxel only counts as "filled" when it matches the pattern)
+var voxelsRemaining: int = 0 
 
-# for use when rotating grid
+# reference vectors, used when rotating/flipping grid
 var cameraForward: Vector3
 var cameraBack: Vector3
 var cameraLeft: Vector3
@@ -136,17 +139,25 @@ func strike(target: Voxel, power: int) -> void:
 		
 		if power <= 200: 	# precise, context-specific
 			print("action: precise strike")
+			
+			# punch
+			if pritchelHole.has_point(Vector2(stepify(target.translation.x + smithingGrid.translation.x - 0.25, 0.1), \
+				stepify(target.translation.z + smithingGrid.translation.z - 0.05, 0.1))): 
+				print("action: punch")
+				smithingGrid.destroyVoxel(target.gridPosition)
+				return
+			
 			var ahead: bool = smithingGrid.isPositionValid(target.gridPosition + cameraForward)\
 				 && smithingGrid.doesVoxelExist(target.gridPosition + cameraForward)
 			var behind: bool = smithingGrid.isPositionValid(target.gridPosition + cameraBack)\
 				 && smithingGrid.doesVoxelExist(target.gridPosition + cameraBack)
 				
-			if ((ahead && !behind) || (!ahead && !behind)): # draw
+			if !behind: # draw
 				print("action: draw")
 				target.draw(cameraForward, cameraUp)
-			elif !ahead && behind: # create
+			elif !ahead: # create
 				smithingGrid.createVoxel(target.gridPosition + cameraForward)
-			elif ahead && behind:
+			elif ahead:
 				print("action: dish")
 				target.dish(cameraUp)
 				
