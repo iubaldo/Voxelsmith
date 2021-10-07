@@ -23,7 +23,7 @@ var gridBounds: Rect2 = Rect2(0, 0, gridWidth, gridHeight) # grid coords
 
 
 func _physics_process(delta):
-	if Globals.selectedVoxel != null && Globals.selectedVoxel.gridPosition == Vector3(gridCenter.x, 0, gridCenter.y):
+	if !Globals.anvilActive || Globals.selectedVoxel != null && Globals.selectedVoxel.gridPosition == Vector3(gridCenter.x, 0, gridCenter.y):
 		centerVoxelOutline.visible = false
 	else:
 		centerVoxelOutline.visible = true
@@ -69,6 +69,7 @@ func createIngot() -> void:
 	pass
 
 
+# to-do later: add anvil bounds to globals and check if voxel is within smithing area
 func createVoxel(targetPos: Vector3) -> void: # grid coords
 	if isPositionValid(targetPos):
 		var newVoxel = voxelTemplate.instance()

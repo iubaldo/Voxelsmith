@@ -38,6 +38,7 @@ var cameraForward: Vector3
 var cameraBack: Vector3
 var cameraLeft: Vector3
 var cameraRight: Vector3
+var cameraUp: Vector3
 
 func _ready():
 	label3D = $Label3D
@@ -47,6 +48,7 @@ func _ready():
 	cameraBack = global_transform.basis.z
 	cameraLeft = -global_transform.basis.x
 	cameraRight = global_transform.basis.x
+	cameraUp = global_transform.basis.y
 	
 	pass
 
@@ -101,6 +103,11 @@ func _input(event):
 			moveGrid(3)
 		elif event.is_action_pressed("moveLeft"):
 			moveGrid(4)
+			
+		if event.is_action_pressed("flipGridX"):
+			flipGridX()
+		elif event.is_action_pressed("flipGridZ"):
+			flipGridZ()
 	pass
 
 
@@ -136,10 +143,27 @@ func strike(target: Voxel, power: int) -> void:
 				if smithingGrid.isPositionValid(target.gridPosition + cameraBack)\
 				 	&&!smithingGrid.doesVoxelExist(target.gridPosition + cameraBack): # draw
 					print("action: draw")
-					target.draw(cameraForward, Vector3.UP) # replace with cameraUp later
+					target.draw(cameraForward, cameraUp)
 				else: # dish
 					print("action: dish")
-					target.dish(Vector3.UP) # replace with cameraUp later
+					target.dish(cameraUp)
+					
+					var neighbors = []
+					neighbors.push_back(target.gridPosition + cameraForward)
+					neighbors.push_back(target.gridPosition + cameraLeft)
+					neighbors.push_back(target.gridPosition + cameraRight)
+					neighbors.push_back(target.gridPosition + cameraBack)
+					
+					for targetPos in neighbors:
+						if smithingGrid.isPositionValid(targetPos) && smithingGrid.getVoxel(targetPos) != null:
+							if target.dishUp && smithingGrid.getVoxel(targetPos).dishUp\
+								|| target.dishDown && smithingGrid.getVoxel(targetPos).dishDown:
+								print("connecting neighbor")
+								smithingGrid.getVoxel(targetPos).connectDish(targetPos - target.gridPosition, cameraUp)
+								print("connecting target")
+								target.connectDish(-(targetPos - target.gridPosition), cameraUp)
+								print("connected dish")
+					
 			pass
 		elif power <= 300: 	# light, 3x3 cross centered on target
 			print("action: light strike")
@@ -179,7 +203,7 @@ func strike(target: Voxel, power: int) -> void:
 			else: 
 				print("failed to create voxel - target position " + var2str(targetPos) + " invalid")
 				
-		print("targetPos: " + var2str(target.gridPosition))
+		# print("targetPos: " + var2str(target.gridPosition))
 		
 		for targetPos in targetList:
 			if smithingGrid.doesVoxelExist(targetPos) && smithingGrid.getVoxel(targetPos) != null:
@@ -209,6 +233,22 @@ func rotateGridCCW() -> void:
 	cameraRight = cameraBack;
 	cameraBack = cameraLeft;
 	cameraLeft = temp;
+	pass
+func flipGridX() -> void:
+	smithingGrid.rotate_x(deg2rad(180.0))
+	
+	var temp = cameraForward
+	cameraForward = cameraBack
+	cameraBack = temp
+	cameraUp *= -1
+	pass
+func flipGridZ() -> void:
+	smithingGrid.rotate_z(deg2rad(180.0))
+	
+	var temp = cameraLeft
+	cameraLeft = cameraRight
+	cameraRight = temp
+	cameraUp *= -1
 	pass
 
 

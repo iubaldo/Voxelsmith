@@ -9,6 +9,11 @@ var selectedVoxel: Voxel = null
 
 func resetAnvil() -> void:
 	subvoxelMode = false
+	if selectedVoxel != null:
+		selectedVoxel.outlineMesh.visible = false
+	if selectedSubvoxel != null:
+		selectedSubvoxel.outlineMesh.visible = false
+		
 	selectedSubvoxel = null
 	selectedVoxel = null
 
