@@ -27,8 +27,7 @@ var gridBounds: Rect2 = Rect2(-14 * STEP_SIZE, -28 * STEP_SIZE, 29 * STEP_SIZE, 
 var anvilBounds: Rect2 = Rect2(-7 * STEP_SIZE, 3 * STEP_SIZE, 15 * STEP_SIZE, 6 * STEP_SIZE)
 var pritchelHole: Rect2 = Rect2(5 * STEP_SIZE, -1 * STEP_SIZE, 1 * STEP_SIZE, 3 * STEP_SIZE)
 
-# smithing variables
-
+# striking
 var maxStrikePower: int = 500
 var strikePower: int = 0
 var strikePowerIncreaseRate: int = 500
@@ -43,6 +42,14 @@ var cameraLeft: Vector3
 var cameraRight: Vector3
 var cameraUp: Vector3
 
+# camera zoom
+var defaultZoom: float = 70
+var zoomDir: float = 0 # -1 for zoom in, 1 for zoom out, 0 for no zoom
+export (int, 0, 179) var minZoom = 25
+export (int, 0, 179) var maxZoom = 90
+export (float, 0, 1000, 0.1) var zoomSpeed = 150
+export (float, 0, 1, 0.1) var zoomSpeedDamp = 0.8
+
 func _ready():
 	label3D = $Label3D
 	workstationCamera = $Camera
@@ -56,12 +63,12 @@ func _ready():
 	pass
 
 func _process(delta):
+	zoomCamera(delta)
 	label3D.visible = true if (isSelected && !isActive) else false
 	pass
 	
 
-func _physics_process(delta):
-	
+func _physics_process(delta):		
 	if isActive && smithingGrid != null:
 		if strikePower != 0:
 			powerLabel.text = "Strike Power: " + var2str(strikePower)
@@ -85,7 +92,7 @@ func _physics_process(delta):
 				strikeTimer.start()
 	pass
 
-func _input(event):
+func _unhandled_input(event):
 	# debug controls, remove later
 	if Globals.anvilActive && event.is_action_pressed("debug_addIngot"):
 		var newIngot = Ingot.new()
@@ -111,6 +118,13 @@ func _input(event):
 			flipGridX()
 		elif event.is_action_pressed("flipGridZ"):
 			flipGridZ()
+			
+		if event.is_action_pressed("resetZoom"):
+			workstationCamera.fov = defaultZoom
+		if event.is_action_released("zoomIn"):
+			zoomDir = -1
+		elif event.is_action_released("zoomOut"):
+			zoomDir = 1
 	pass
 
 
@@ -120,8 +134,7 @@ func onActive() -> void:
 	smithingUI.visible = true
 	Globals.anvilActive = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-
-
+	pass
 func onDeactive() -> void:
 	anvilGrid.visible = false
 	smithingUI.visible = false
@@ -308,3 +321,17 @@ func _on_strikeTimer_timeout():
 func _on_strikeCDTimer_timeout():
 	# make hammer model invisible
 	pass 
+
+
+func zoomCamera(delta: float) -> void:
+	var newZoom = clamp(workstationCamera.fov + (zoomSpeed * zoomDir * delta), minZoom, maxZoom)
+	workstationCamera.fov = newZoom
+	
+	zoomDir *= zoomSpeedDamp
+	if abs(zoomDir) <= 0.0001:
+		zoomDir = 0
+	pass
+
+
+func resetZoom(delta: float) -> void:
+	pass
