@@ -17,8 +17,7 @@ script = ExtResource( 5 )
 [node name="Environment" type="Spatial" parent="."]
 
 [node name="DirectionalLight" type="DirectionalLight" parent="Environment"]
-transform = Transform( 0.813746, -0.270893, 0.514231, -0.0845198, 0.820188, 0.565817, -0.575042, -0.503894, 0.644529, 0, 11.1076, 0 )
-light_energy = 0.5
+transform = Transform( 0.629855, -0.571458, 0.52604, 0.642689, 0.76376, 0.060178, -0.436157, 0.300176, 0.848328, 0, 11.1076, 0 )
 
 [node name="DemoFloor" type="StaticBody" parent="Environment"]
 

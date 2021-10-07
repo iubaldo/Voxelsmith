@@ -40,15 +40,15 @@ func draw(forward: Vector3, up: Vector3) -> void:
 	
 	if forward == Vector3.FORWARD:
 		zRange = 5
-		xRange = range(3, 5)
+		xRange = range(4, 5)
 	elif forward == Vector3.BACK:
 		zRange = 5
-		xRange = range(0, 2)
+		xRange = range(0, 1)
 	elif forward == Vector3.LEFT:
-		zRange = range(3, 5)
+		zRange = range(4, 5)
 		xRange = 5
 	elif forward == Vector3.RIGHT:
-		zRange = range(0, 2)
+		zRange = range(0, 1)
 		xRange = 5
 	
 	for x in xRange:

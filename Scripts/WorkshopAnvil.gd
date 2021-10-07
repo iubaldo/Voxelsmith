@@ -136,33 +136,33 @@ func strike(target: Voxel, power: int) -> void:
 		
 		if power <= 200: 	# precise, context-specific
 			print("action: precise strike")
-			if smithingGrid.isPositionValid(target.gridPosition + cameraForward)\
-				 && !smithingGrid.doesVoxelExist(target.gridPosition + cameraForward): # create
+			var ahead: bool = smithingGrid.isPositionValid(target.gridPosition + cameraForward)\
+				 && smithingGrid.doesVoxelExist(target.gridPosition + cameraForward)
+			var behind: bool = smithingGrid.isPositionValid(target.gridPosition + cameraBack)\
+				 && smithingGrid.doesVoxelExist(target.gridPosition + cameraBack)
+				
+			if ((ahead && !behind) || (!ahead && !behind)): # draw
+				print("action: draw")
+				target.draw(cameraForward, cameraUp)
+			elif !ahead && behind: # create
 				smithingGrid.createVoxel(target.gridPosition + cameraForward)
-			else:
-				if smithingGrid.isPositionValid(target.gridPosition + cameraBack)\
-				 	&&!smithingGrid.doesVoxelExist(target.gridPosition + cameraBack): # draw
-					print("action: draw")
-					target.draw(cameraForward, cameraUp)
-				else: # dish
-					print("action: dish")
-					target.dish(cameraUp)
-					
-					var neighbors = []
-					neighbors.push_back(target.gridPosition + cameraForward)
-					neighbors.push_back(target.gridPosition + cameraLeft)
-					neighbors.push_back(target.gridPosition + cameraRight)
-					neighbors.push_back(target.gridPosition + cameraBack)
-					
-					for targetPos in neighbors:
-						if smithingGrid.isPositionValid(targetPos) && smithingGrid.getVoxel(targetPos) != null:
-							if target.dishUp && smithingGrid.getVoxel(targetPos).dishUp\
-								|| target.dishDown && smithingGrid.getVoxel(targetPos).dishDown:
-								print("connecting neighbor")
-								smithingGrid.getVoxel(targetPos).connectDish(targetPos - target.gridPosition, cameraUp)
-								print("connecting target")
-								target.connectDish(-(targetPos - target.gridPosition), cameraUp)
-								print("connected dish")
+			elif ahead && behind:
+				print("action: dish")
+				target.dish(cameraUp)
+				
+				var neighbors = []
+				neighbors.push_back(target.gridPosition + cameraForward)
+				neighbors.push_back(target.gridPosition + cameraLeft)
+				neighbors.push_back(target.gridPosition + cameraRight)
+				neighbors.push_back(target.gridPosition + cameraBack)
+				
+				for targetPos in neighbors:
+					if smithingGrid.isPositionValid(targetPos) && smithingGrid.getVoxel(targetPos) != null:
+						if target.dishUp && smithingGrid.getVoxel(targetPos).dishUp\
+							|| target.dishDown && smithingGrid.getVoxel(targetPos).dishDown:
+							smithingGrid.getVoxel(targetPos).connectDish(targetPos - target.gridPosition, cameraUp)
+							target.connectDish(-(targetPos - target.gridPosition), cameraUp)
+							print("connected dish")
 					
 			pass
 		elif power <= 300: 	# light, 3x3 cross centered on target
@@ -270,7 +270,7 @@ func moveGrid(direction: int) -> void:
 
 
 func addIngot(ingot: Ingot) -> void:
-	if smithingGrid != null && ingot.matType == smithingGrid.matType:
+	if smithingGrid != null && ingot.matType == smithingGrid.matType: # null error, fix later
 		smithingGrid.voxelPool += 10
 	else:
 		# create new smithingGrid using the ingot's materialType
