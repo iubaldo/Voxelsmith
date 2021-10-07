@@ -1,11 +1,11 @@
-extends Node
+extends Spatial
 class_name Subvoxel
 # note: subvoxels should inherit their material from their parent voxel
 
 onready var outlineMesh = $OutlineMesh
 onready var collider = $SubvoxelMesh/SubvoxelHitbox/CollisionShape
 
-var parent: Voxel
+var parentVoxel: Voxel
 var gridPosition: Vector3
 
 func _ready():

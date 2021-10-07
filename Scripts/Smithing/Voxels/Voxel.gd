@@ -27,7 +27,7 @@ func _ready():
 			for z in 5:
 				subvoxelMatrix[x][y][z] = find_node("Layer" + var2str(y))\
 				.find_node("Row" + var2str(x)).find_node("Subvoxel" + var2str(z))
-				subvoxelMatrix[x][y][z].parent = self
+				subvoxelMatrix[x][y][z].parentVoxel = self
 				subvoxelMatrix[x][y][z].gridPosition = Vector3(x, y, z)
 	pass
 
@@ -54,8 +54,7 @@ func draw(forward: Vector3, up: Vector3) -> void:
 	for x in xRange:
 		for z in zRange:
 			if subvoxelMatrix[x][y][z] != null:
-				subvoxelMatrix[x][y][z].queue_free()
-				subvoxelMatrix[x][y][z] = null
+				destroySubvoxel(Vector3(x, y, z))
 	pass
 
 
@@ -77,15 +76,13 @@ func dish(up: Vector3) -> void:
 	for x in 5:
 		for z in 5:
 			if subvoxelMatrix[x][y1][z] != null:
-				subvoxelMatrix[x][y1][z].queue_free()
-				subvoxelMatrix[x][y1][z] = null
+				destroySubvoxel(Vector3(x, y1, z))
 	 
 	# middle 3x3 2nd topmost layer
 	for x in range(1, 4):
 		for z in range(1, 4):
 			if subvoxelMatrix[x][y2][z] != null:
-				subvoxelMatrix[x][y2][z].queue_free()
-				subvoxelMatrix[x][y2][z] = null
+				destroySubvoxel(Vector3(x, y2, z))
 	pass
 
 
@@ -114,16 +111,15 @@ func connectDish(dir: Vector3, up: Vector3) -> void:
 	for x in xRange:
 		for z in zRange:
 			if subvoxelMatrix[x][y][z] != null:
-				subvoxelMatrix[x][y][z].queue_free()
-				subvoxelMatrix[x][y][z] = null
+				destroySubvoxel(Vector3(x, y, z))
 	
 	pass
 
 
 # note: subvoxels can only be removed, not added
-func removeSubvoxel(var x: int, var y: int, var z: int) -> void:
-	subvoxelMatrix[x][y][z].queue_free()
-	subvoxelMatrix[x][y][z] = null
+func destroySubvoxel(targetPos: Vector3) -> void:
+	subvoxelMatrix[targetPos.x][targetPos.y][targetPos.z].queue_free()
+	subvoxelMatrix[targetPos.x][targetPos.y][targetPos.z] = null
 	pass
 
 

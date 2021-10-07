@@ -82,7 +82,10 @@ func _physics_process(delta):
 						# some kind of penalty for too light
 						pass
 					else:
-						strike(Globals.selectedVoxel, strikePower)
+						if !Globals.subvoxelMode && Globals.selectedVoxel != null:
+							strike(Globals.selectedVoxel, strikePower)
+						elif Globals.subvoxelMode && Globals.selectedSubvoxel != null:
+							strike(Globals.selectedSubvoxel, strikePower)
 						strikePower = 0
 				else:
 					if strikePower < maxStrikePower:
@@ -100,6 +103,10 @@ func _unhandled_input(event):
 		addIngot(newIngot)
 		
 	if Globals.anvilActive && smithingGrid != null && strikeCDTimer.is_stopped():
+		if event.is_action_pressed("toggleSubvoxelMode"):
+			Globals.toggleSubvoxelMode()
+		
+		# grid manipulation
 		if event.is_action_pressed("rotateGridCW"):
 			rotateGridCW()
 		elif event.is_action_pressed("rotateGridCCW"):
@@ -119,6 +126,7 @@ func _unhandled_input(event):
 		elif event.is_action_pressed("flipGridZ"):
 			flipGridZ()
 			
+		# camera
 		if event.is_action_pressed("resetZoom"):
 			workstationCamera.fov = defaultZoom
 		if event.is_action_released("zoomIn"):
@@ -144,96 +152,105 @@ func onDeactive() -> void:
 	pass
 
 
-# smithing functions
-
-func strike(target: Voxel, power: int) -> void:
+func strike(target, power: int) -> void: # target is either voxel or subvoxel
 	if target != null:
-		var targetList = [] # list of positions to check
-		
-		if power <= 200: 	# precise, context-specific
-			print("action: precise strike")
+		if target is Voxel:
+			var targetList = [] # list of positions to check
 			
-			# punch
-			if pritchelHole.has_point(Vector2(stepify(target.translation.x + smithingGrid.translation.x - 0.25, 0.1), \
-				stepify(target.translation.z + smithingGrid.translation.z - 0.05, 0.1))): 
-				print("action: punch")
-				smithingGrid.destroyVoxel(target.gridPosition)
-				return
-			
-			var ahead: bool = smithingGrid.isPositionValid(target.gridPosition + cameraForward)\
-				 && smithingGrid.doesVoxelExist(target.gridPosition + cameraForward)
-			var behind: bool = smithingGrid.isPositionValid(target.gridPosition + cameraBack)\
-				 && smithingGrid.doesVoxelExist(target.gridPosition + cameraBack)
+			if power <= 100:
+				# some kind of penalty for striking too lightly
+				pass 
+			if power <= 200: 	# precise, context-specific
+				print("action: precise strike")
 				
-			if !behind: # draw
-				print("action: draw")
-				target.draw(cameraForward, cameraUp)
-			elif !ahead: # create
-				smithingGrid.createVoxel(target.gridPosition + cameraForward)
-			elif ahead:
-				print("action: dish")
-				target.dish(cameraUp)
+				# punch
+				if pritchelHole.has_point(Vector2(stepify(target.translation.x + smithingGrid.translation.x - 0.25, 0.1), \
+					stepify(target.translation.z + smithingGrid.translation.z - 0.05, 0.1))): 
+					print("action: punch")
+					smithingGrid.destroyVoxel(target.gridPosition)
+					return
 				
-				var neighbors = []
-				neighbors.push_back(target.gridPosition + cameraForward)
-				neighbors.push_back(target.gridPosition + cameraLeft)
-				neighbors.push_back(target.gridPosition + cameraRight)
-				neighbors.push_back(target.gridPosition + cameraBack)
-				
-				for targetPos in neighbors:
-					if smithingGrid.isPositionValid(targetPos) && smithingGrid.getVoxel(targetPos) != null:
-						if target.dishUp && smithingGrid.getVoxel(targetPos).dishUp\
-							|| target.dishDown && smithingGrid.getVoxel(targetPos).dishDown:
-							smithingGrid.getVoxel(targetPos).connectDish(targetPos - target.gridPosition, cameraUp)
-							target.connectDish(-(targetPos - target.gridPosition), cameraUp)
-							print("connected dish")
+				var ahead: bool = smithingGrid.isPositionValid(target.gridPosition + cameraForward)\
+					 && smithingGrid.doesVoxelExist(target.gridPosition + cameraForward)
+				var behind: bool = smithingGrid.isPositionValid(target.gridPosition + cameraBack)\
+					 && smithingGrid.doesVoxelExist(target.gridPosition + cameraBack)
 					
-			pass
-		elif power <= 300: 	# light, 3x3 cross centered on target
-			print("action: light strike")
-			targetList.push_back(target.gridPosition + cameraForward)
-			targetList.push_back(target.gridPosition + cameraLeft)
-			targetList.push_back(target.gridPosition)
-			targetList.push_back(target.gridPosition + cameraRight)
-			targetList.push_back(target.gridPosition + cameraBack)
-		elif power <= 400:	# medium, horizontal 1x3 area in front of target
-			print("action: medium strike")
-			targetList.push_back(target.gridPosition + cameraForward + cameraLeft)
-			targetList.push_back(target.gridPosition + cameraForward)
-			targetList.push_back(target.gridPosition + cameraForward + cameraRight)
-			targetList.push_back(target.gridPosition)
-		else: 				# heavy, 3x3 square centered on target
-			print("action: heavy strike")
-			targetList.push_back(target.gridPosition + cameraForward + cameraLeft)
-			targetList.push_back(target.gridPosition + cameraForward)
-			targetList.push_back(target.gridPosition + cameraForward + cameraRight)
-			targetList.push_back(target.gridPosition + cameraLeft)
-			targetList.push_back(target.gridPosition)
-			targetList.push_back(target.gridPosition + cameraRight)
-			targetList.push_back(target.gridPosition + cameraBack + cameraLeft)
-			targetList.push_back(target.gridPosition + cameraBack)
-			targetList.push_back(target.gridPosition + cameraBack + cameraRight)
-		
-		for targetPos in targetList:
-			if smithingGrid.isPositionValid(targetPos):
-				if smithingGrid.getVoxel(targetPos) == null:
-					smithingGrid.createVoxel(targetPos)
-					print("created voxel at position " + var2str(targetPos))
-				else:
-					if pritchelHole.has_point(Vector2(targetPos.x, targetPos.z)):
-						smithingGrid.destroyVoxel(targetPos)
-					else:
-						print("failed to create voxel - voxel already exists at position " + var2str(targetPos))
-			else: 
-				print("failed to create voxel - target position " + var2str(targetPos) + " invalid")
-				
-		# print("targetPos: " + var2str(target.gridPosition))
-		
-		for targetPos in targetList:
-			if smithingGrid.doesVoxelExist(targetPos) && smithingGrid.getVoxel(targetPos) != null:
-				# apply heat loss
+				if !behind: # draw
+					print("action: draw")
+					target.draw(cameraForward, cameraUp)
+				elif !ahead: # create
+					smithingGrid.createVoxel(target.gridPosition + cameraForward)
+				elif ahead:
+					print("action: dish")
+					target.dish(cameraUp)
+					
+					var neighbors = []
+					neighbors.push_back(target.gridPosition + cameraForward)
+					neighbors.push_back(target.gridPosition + cameraLeft)
+					neighbors.push_back(target.gridPosition + cameraRight)
+					neighbors.push_back(target.gridPosition + cameraBack)
+					
+					for targetPos in neighbors:
+						if smithingGrid.isPositionValid(targetPos) && smithingGrid.getVoxel(targetPos) != null:
+							if target.dishUp && smithingGrid.getVoxel(targetPos).dishUp\
+								|| target.dishDown && smithingGrid.getVoxel(targetPos).dishDown:
+								smithingGrid.getVoxel(targetPos).connectDish(targetPos - target.gridPosition, cameraUp)
+								target.connectDish(-(targetPos - target.gridPosition), cameraUp)
+								print("connected dish")
+						
 				pass
-				
+			elif power <= 300: 	# light, 3x3 cross centered on target
+				print("action: light strike")
+				targetList.push_back(target.gridPosition + cameraForward)
+				targetList.push_back(target.gridPosition + cameraLeft)
+				targetList.push_back(target.gridPosition)
+				targetList.push_back(target.gridPosition + cameraRight)
+				targetList.push_back(target.gridPosition + cameraBack)
+			elif power <= 400:	# medium, horizontal 1x3 area in front of target
+				print("action: medium strike")
+				targetList.push_back(target.gridPosition + cameraForward + cameraLeft)
+				targetList.push_back(target.gridPosition + cameraForward)
+				targetList.push_back(target.gridPosition + cameraForward + cameraRight)
+				targetList.push_back(target.gridPosition)
+			else: 				# heavy, 3x3 square centered on target
+				print("action: heavy strike")
+				targetList.push_back(target.gridPosition + cameraForward + cameraLeft)
+				targetList.push_back(target.gridPosition + cameraForward)
+				targetList.push_back(target.gridPosition + cameraForward + cameraRight)
+				targetList.push_back(target.gridPosition + cameraLeft)
+				targetList.push_back(target.gridPosition)
+				targetList.push_back(target.gridPosition + cameraRight)
+				targetList.push_back(target.gridPosition + cameraBack + cameraLeft)
+				targetList.push_back(target.gridPosition + cameraBack)
+				targetList.push_back(target.gridPosition + cameraBack + cameraRight)
+			
+			for targetPos in targetList:
+				if smithingGrid.isPositionValid(targetPos):
+					if smithingGrid.getVoxel(targetPos) == null:
+						smithingGrid.createVoxel(targetPos)
+						print("created voxel at position " + var2str(targetPos))
+					else:
+						if pritchelHole.has_point(Vector2(targetPos.x, targetPos.z)):
+							smithingGrid.destroyVoxel(targetPos)
+						else:
+							print("failed to create voxel - voxel already exists at position " + var2str(targetPos))
+				else: 
+					print("failed to create voxel - target position " + var2str(targetPos) + " invalid")
+					
+			# print("targetPos: " + var2str(target.gridPosition))
+			
+			for targetPos in targetList:
+				if smithingGrid.doesVoxelExist(targetPos) && smithingGrid.getVoxel(targetPos) != null:
+					# apply heat loss
+					pass
+			pass
+		elif target is Subvoxel:
+			if power <= 100:
+				# some kind of penalty for striking too lightly
+				pass
+			elif power <= 200:
+				target.parentVoxel.destroySubvoxel(target.gridPosition)
+			pass
 		strikeCDTimer.start()
 	else:
 		print("strike() - target is null!")
