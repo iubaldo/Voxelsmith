@@ -66,7 +66,6 @@ func createIngot() -> void:
 		for z in range(-1 + gridCenter.y, 2 + gridCenter.y):
 			createVoxel(Vector3(x, 0, z))
 			
-	print("created ingot")
 	pass
 
 

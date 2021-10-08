@@ -24,7 +24,7 @@ var patternGrid # the currently active patternGrid, if any
 
 const STEP_SIZE: float = 0.1 # constant for converting to a normalized coordinate system for voxels
 var gridBounds: Rect2 = Rect2(-14 * STEP_SIZE, -28 * STEP_SIZE, 29 * STEP_SIZE, 49 * STEP_SIZE)
-var anvilBounds: Rect2 = Rect2(-7 * STEP_SIZE, 3 * STEP_SIZE, 15 * STEP_SIZE, 6 * STEP_SIZE)
+var anvilBounds: Rect2 = Rect2(-6 * STEP_SIZE, -2 * STEP_SIZE, 13 * STEP_SIZE, 5 * STEP_SIZE)
 var pritchelHole: Rect2 = Rect2(5 * STEP_SIZE, -1 * STEP_SIZE, 1 * STEP_SIZE, 3 * STEP_SIZE)
 
 # striking
@@ -154,6 +154,12 @@ func onDeactive() -> void:
 
 func strike(target, power: int) -> void: # target is either voxel or subvoxel
 	if target != null:
+		if !anvilBounds.has_point(Vector2(stepify(target.translation.x + smithingGrid.translation.x - 0.25, 0.1), \
+			stepify(target.translation.z + smithingGrid.translation.z - 0.05, 0.1))): 
+			print(var2str(Vector2(stepify(target.translation.x + smithingGrid.translation.x - 0.25, 0.1), \
+			stepify(target.translation.z + smithingGrid.translation.z - 0.05, 0.1))))
+			print("strike() - target outside anvil grid!")
+			return
 		if target is Voxel:
 			var targetList = [] # list of positions to check
 			
@@ -296,23 +302,41 @@ func flipGridZ() -> void:
 func moveGrid(direction: int) -> void:
 	match direction:
 		1: # up
-			if (smithingGrid.translation.z - 1 * STEP_SIZE >= -14 * STEP_SIZE):
-				smithingGrid.translation.z += -1 * STEP_SIZE
+			if gridBounds.has_point(Vector2((smithingGrid.translation + Vector3.FORWARD * STEP_SIZE).x, \
+			(smithingGrid.translation + Vector3.FORWARD * STEP_SIZE).z)):
+				smithingGrid.translation += Vector3.FORWARD * STEP_SIZE
+			else:
+				print("moveGrid() - target out of bounds, can't move up!")
 		2: # right
-			if (smithingGrid.translation.x + 1 * STEP_SIZE <= 28 * STEP_SIZE):
-				smithingGrid.translation.x += 1 * STEP_SIZE
+			if gridBounds.has_point(Vector2((smithingGrid.translation + Vector3.RIGHT * STEP_SIZE).x, \
+			(smithingGrid.translation + Vector3.RIGHT * STEP_SIZE).z)):
+				smithingGrid.translation += Vector3.RIGHT * STEP_SIZE
+			else:
+				print("moveGrid() - target out of bounds, can't move right!")
 		3: # down
-			if (smithingGrid.translation.z + 1 * STEP_SIZE <= 14 * STEP_SIZE):
-				smithingGrid.translation.z += 1 * STEP_SIZE
+			if gridBounds.has_point(Vector2((smithingGrid.translation + Vector3.BACK * STEP_SIZE).x, \
+			(smithingGrid.translation + Vector3.BACK * STEP_SIZE).z)):
+				smithingGrid.translation += Vector3.BACK * STEP_SIZE
+			else:
+				print("moveGrid() - target out of bounds, can't move down!")
 		4: # left
-			if (smithingGrid.translation.x + -1 * STEP_SIZE >= -28 * STEP_SIZE):
-				smithingGrid.translation.x += -1 * STEP_SIZE
+			if gridBounds.has_point(Vector2((smithingGrid.translation + Vector3.LEFT * STEP_SIZE).x, \
+			(smithingGrid.translation + Vector3.LEFT * STEP_SIZE).z)):
+				smithingGrid.translation += Vector3.LEFT * STEP_SIZE
+			else:
+				print("moveGrid() - target out of bounds, can't move left!")
 	pass
 
 
 func addIngot(ingot: Ingot) -> void:
-	if smithingGrid != null && ingot.matType == smithingGrid.matType: # null error, fix later
-		smithingGrid.voxelPool += 10
+	if smithingGrid != null:
+		if ingot.forgingMat.material.matType == smithingGrid.forgingMat.material.matType: # null error, fix later
+			smithingGrid.voxelPool += 10
+			print("addIngot - increased voxel pool")
+		else:
+			print("addIngot - incompatible materialTypes!")
+			print("smithingGrid materialType: " + var2str(smithingGrid.forgingMat.material.matType))
+			print("ingot materialType: " + var2str(ingot.forgingMat.material.matType))
 	else:
 		# create new smithingGrid using the ingot's materialType
 		smithingGrid = smithingGridTemplate.instance()
@@ -320,7 +344,8 @@ func addIngot(ingot: Ingot) -> void:
 		add_child(smithingGrid)
 		smithingGrid.translation = gridOrigin.translation
 		smithingGrid.createIngot()
-		pass
+		print("addIngot - created new smithingGrid")
+			
 	pass
 
 
