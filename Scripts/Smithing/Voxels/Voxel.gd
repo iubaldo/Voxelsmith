@@ -1,12 +1,13 @@
-extends Spatial
+extends StaticBody
 class_name Voxel
 
 export (Resource) var forgingMat
 
 onready var outlineMesh = $OutlineMesh
-onready var collider = $VoxelHitbox/CollisionShape
+onready var collider = $CollisionShape
 
-export var subvoxelMaterial: SpatialMaterial # voxel doesn't need its own material, so we pass this down to the subvoxels instead
+export var subvoxelColor: Color # voxel doesn't need its own color, so we return this down to the subvoxels instead
+var smithingGrid # the voxel's parent smithingGrid
 var subvoxelMatrix = [] # 3D matrix of subvoxels
 var heat: int = 0 # the voxel's current heat value
 var gridPosition: Vector3 # the voxel's position in the gridMatrix
@@ -17,6 +18,7 @@ var dishDown: bool = false # whether the voxel has been dished at Vector3.DOWN
 
 func _ready():
 	add_to_group("Voxels")
+	smithingGrid = get_parent()
 	subvoxelMatrix.resize(5)				# x-dimension
 	for x in 5:
 		subvoxelMatrix[x] = []
@@ -28,8 +30,10 @@ func _ready():
 				subvoxelMatrix[x][y][z] = find_node("Layer" + var2str(y))\
 				.find_node("Row" + var2str(x)).find_node("Subvoxel" + var2str(z))
 				subvoxelMatrix[x][y][z].parentVoxel = self
+				subvoxelMatrix[x][y][z].smithingGrid = smithingGrid
 				subvoxelMatrix[x][y][z].gridPosition = Vector3(x, y, z)
-	pass
+				
+	return
 
 
 # removes the "bottom" 3x5 subvoxels from the top layer
@@ -55,7 +59,7 @@ func draw(forward: Vector3, up: Vector3) -> void:
 		for z in zRange:
 			if subvoxelMatrix[x][y][z] != null:
 				destroySubvoxel(Vector3(x, y, z))
-	pass
+	return
 
 
 # removes the top layer of subvoxels as well as the middle 3x3 subvoxels of the layer beneath
@@ -83,7 +87,7 @@ func dish(up: Vector3) -> void:
 		for z in range(1, 4):
 			if subvoxelMatrix[x][y2][z] != null:
 				destroySubvoxel(Vector3(x, y2, z))
-	pass
+	return
 
 
 # when a neighboring voxel has been dished, remove the voxels on the 2nd topmost layer that separate them
@@ -113,14 +117,14 @@ func connectDish(dir: Vector3, up: Vector3) -> void:
 			if subvoxelMatrix[x][y][z] != null:
 				destroySubvoxel(Vector3(x, y, z))
 	
-	pass
+	return
 
 
 # note: subvoxels can only be removed, not added
 func destroySubvoxel(targetPos: Vector3) -> void:
 	subvoxelMatrix[targetPos.x][targetPos.y][targetPos.z].queue_free()
 	subvoxelMatrix[targetPos.x][targetPos.y][targetPos.z] = null
-	pass
+	return
 
 
 func compareVoxel(other: Voxel) -> bool:
@@ -135,17 +139,17 @@ func compareVoxel(other: Voxel) -> bool:
 
 func toggleVoxelCollider() -> void:
 	collider.disabled = !collider.disabled
-	pass
+	return
 
 
 # note: these should only call if subvoxelMode = false and anvil is active
 func _on_VoxelHitbox_mouse_entered():
-	if !Globals.subvoxelMode && Globals.anvilActive:
+	if !Globals.subvoxelMode && Globals.isAnvilActive():
 		Globals.selectedVoxel = self
 		outlineMesh.visible = true
-	pass
+	return
 func _on_VoxelHitbox_mouse_exited():
-	if !Globals.subvoxelMode && Globals.anvilActive:
+	if !Globals.subvoxelMode && Globals.isAnvilActive():
 		Globals.selectedVoxel = null
 		outlineMesh.visible = false
-	pass
+	return

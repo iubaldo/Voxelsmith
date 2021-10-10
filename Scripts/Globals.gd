@@ -1,8 +1,26 @@
 extends Node
 
+# items
+onready var ingotTemplate = load("res://Scenes/Items/Ingot.tscn")
+onready var smithingGridTemplate = load("res://Scenes/Smithing/SmithingGrid.tscn")
+onready var voxelTemplate = load("res://Scenes/Smithing/Voxels/Voxel.tscn")
+onready var patternTemplate = load("res://Scenes/Smithing/Patterns/Pattern.tscn")
+
+# components
+onready var bladeSwordComponentTemplate = load("res://Scripts/Items/Smithing/Components/BladeSwordComponent.gd")
+
+# materials
+onready var vallumTemplate = load("res://Scripts/Smithing/Materials/Vallum.gd")
+
+# item data
+onready var forgingMaterialTemplate = load("res://Scripts/Smithing/Materials/ForgingMaterial.gd")
+onready var ingotDataTemplate = load("res://Scripts/Items/Smithing/IngotData.gd")
+onready var sgDataTemplate = load("res://Scripts/Items/Smithing/SmithingGridData.gd")
+onready var patternDataTemplate = load("res://Scripts/Items/Smithing/Patterns/PatternData.gd")
+
 var subvoxelMode: bool = false # whether or not to target subvoxels
-var anvilActive: bool = false
-var forgeActive: bool = false
+var selectedWorkstation: Interactable = null
+var activeWorkstation: Interactable = null
 
 var selectedSubvoxel: Subvoxel = null
 var selectedVoxel: Voxel = null
@@ -10,7 +28,7 @@ var selectedVoxel: Voxel = null
 func resetAnvil() -> void:
 	subvoxelMode = false
 	resetTargets()
-	pass
+	return
 
 
 func toggleSubvoxelMode() -> void:
@@ -19,6 +37,7 @@ func toggleSubvoxelMode() -> void:
 	resetTargets()
 	get_tree().call_group("Subvoxels", "toggleSubvoxelCollider")
 	get_tree().call_group("Voxels", "toggleVoxelCollider")
+	return
 
 
 func resetTargets() -> void:
@@ -28,4 +47,22 @@ func resetTargets() -> void:
 	if selectedSubvoxel != null:
 		selectedSubvoxel.outlineMesh.visible = false
 		selectedSubvoxel = null
-	pass
+	return
+
+
+func isAnvilActive() -> bool:
+	if activeWorkstation != null && activeWorkstation.workstationType == Interactable.workstationTypes.anvil:
+		return true
+	return false
+func isAnvilSelected() -> bool:
+	if selectedWorkstation != null && selectedWorkstation.workstationType == Interactable.workstationTypes.anvil:
+		return true
+	return false
+func isForgeActive() -> bool:
+	if activeWorkstation != null && activeWorkstation.workstationType == Interactable.workstationTypes.forge:
+		return true
+	return false
+func isForgeSelected() -> bool:
+	if selectedWorkstation != null && selectedWorkstation.workstationType == Interactable.workstationTypes.forge:
+		return true
+	return false

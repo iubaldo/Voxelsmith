@@ -4,14 +4,18 @@ class_name Interactable
 onready var label3D
 onready var workstationCamera
 
-var isSelected = false
-var isActive = false
+enum workstationTypes { anvil, forge }
+var workstationType
+
+func _ready():
+	add_to_group("Interactable")
+	return
 
 func _process(delta):
-	pass
+	return
 
 func onActive():
-	pass
+	return
 
 func onDeactive():
-	pass
+	return

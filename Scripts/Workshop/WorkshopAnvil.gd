@@ -1,26 +1,19 @@
 extends Interactable
-
-# if interacted with, switch to this camera
-# smithing code here
-
+class_name WorkshopAnvil
 # notes:
 # to check if a pattern has been fulilled, compare matrices for patternGrid and smithingGrid
 #	need to make a voxel comparison function
 
-onready var voxelTemplate = preload("res://Scenes/Smithing/Voxels/Voxel.tscn")
-onready var smithingGridTemplate = preload("res://Scenes/Smithing/SmithingGrid.tscn")
-onready var patternGridTemplate = preload("res://Scenes/Smithing/PatternGrid.tscn")
-onready var forgingMaterialTemplate = preload("res://Scripts/Smithing/Materials/ForgingMaterial.gd")
-onready var vallumTemplate = preload("res://Scripts/Smithing/Materials/Vallum.gd")
 onready var anvilGrid = $AnvilGrid
 onready var gridOrigin: Spatial = $GridOrigin
 onready var smithingUI: Control = $SmithingUI
 onready var powerLabel: Label = $SmithingUI/StrikePowerLabel
-onready var strikeTimer: Timer = $strikeTimer # determines how long before strike is cancelled
-onready var strikeCDTimer: Timer = $strikeCDTimer # determines cooldown before another strike can be made
+onready var strikeTimer: Timer = $StrikeTimer # determines how long before strike is cancelled
+onready var strikeCDTimer: Timer = $StrikeCDTimer # determines cooldown before another strike can be made
 
-var smithingGrid # the currently active smithingGrid, if any
-var patternGrid # the currently active patternGrid, if any
+var anvilIngot: Ingot # the currently active ingot, if any
+var anvilSmithingGrid: SmithingGrid # the currently active smithingGrid, if any
+var anvilPattern: Pattern # the currently active pattern, if any
 
 const STEP_SIZE: float = 0.1 # constant for converting to a normalized coordinate system for voxels
 var gridBounds: Rect2 = Rect2(-14 * STEP_SIZE, -28 * STEP_SIZE, 29 * STEP_SIZE, 49 * STEP_SIZE)
@@ -53,6 +46,7 @@ export (float, 0, 1, 0.1) var zoomSpeedDamp = 0.8
 func _ready():
 	label3D = $Label3D
 	workstationCamera = $Camera
+	workstationType = workstationTypes.anvil
 	
 	cameraForward = -global_transform.basis.z
 	cameraBack = global_transform.basis.z
@@ -60,16 +54,17 @@ func _ready():
 	cameraRight = global_transform.basis.x
 	cameraUp = global_transform.basis.y
 	
-	pass
+	return
 
 func _process(delta):
 	zoomCamera(delta)
-	label3D.visible = true if (isSelected && !isActive) else false
-	pass
+	label3D.visible = true if (Globals.selectedWorkstation != null && Globals.selectedWorkstation == self \
+		&& !Globals.isAnvilActive()) else false
+	return
 	
 
 func _physics_process(delta):		
-	if isActive && smithingGrid != null:
+	if Globals.isAnvilActive() && anvilSmithingGrid != null:
 		if strikePower != 0:
 			powerLabel.text = "Strike Power: " + var2str(strikePower)
 		else:
@@ -93,16 +88,37 @@ func _physics_process(delta):
 						
 			if Input.is_action_just_released("primaryAction"):
 				strikeTimer.start()
-	pass
+	return
 
 func _unhandled_input(event):
-	# debug controls, remove later
-	if Globals.anvilActive && event.is_action_pressed("debug_addIngot"):
-		var newIngot = Ingot.new()
-		newIngot.forgingMat = forgingMaterialTemplate.new(vallumTemplate.new())
-		addIngot(newIngot)
+	# debug action, remove later
+	# simulates creating a smithing grid with an existing ingot + pattern
+	if Globals.isAnvilActive() && !anvilSmithingGrid && event.is_action_pressed("debug_addIngot"):
+		# create forging mat (would be inherited from anvilIngot)
+		var newForgingMat: ForgingMaterial = Globals.forgingMaterialTemplate.new()
+		newForgingMat.initForgingMaterial(Globals.vallumTemplate.new())
 		
-	if Globals.anvilActive && smithingGrid != null && strikeCDTimer.is_stopped():
+		# create component (would be inherited from anvilPattern)
+		var newComponent: ComponentType = Globals.bladeSwordComponentTemplate.new()
+		newComponent.swordSubtype = BladeSwordComponent.swordSubtypes.oneHanded
+		newComponent.setGridSize()
+		
+		# create patternData (would be inherited from anvilPattern)
+		var newPatternData: PatternData = Globals.patternDataTemplate.new()
+		newPatternData.initPatternData(newComponent)
+		
+		# create smithingGrid
+		var newSmithingGrid: SmithingGrid = Globals.smithingGridTemplate.instance()
+		add_child(newSmithingGrid)
+		newSmithingGrid.createSGData(newForgingMat, newPatternData)
+		newSmithingGrid.initSmithingGrid(newSmithingGrid.sgData)
+		anvilSmithingGrid = newSmithingGrid
+		anvilSmithingGrid.createIngot()
+		
+		anvilSmithingGrid.store(gridOrigin.get_global_transform())
+		print("debug addIngot - created new smithingGrid")
+		
+	if Globals.isAnvilActive() && anvilSmithingGrid != null && strikeCDTimer.is_stopped():
 		if event.is_action_pressed("toggleSubvoxelMode"):
 			Globals.toggleSubvoxelMode()
 		
@@ -133,31 +149,31 @@ func _unhandled_input(event):
 			zoomDir = -1
 		elif event.is_action_released("zoomOut"):
 			zoomDir = 1
-	pass
+	return
 
 
 func onActive() -> void:
 	workstationCamera.current = true
 	anvilGrid.visible = true
 	smithingUI.visible = true
-	Globals.anvilActive = true
+	Globals.activeWorkstation = self
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	pass
+	return
 func onDeactive() -> void:
 	anvilGrid.visible = false
 	smithingUI.visible = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	Globals.anvilActive = false
+	Globals.activeWorkstation = null
 	Globals.resetAnvil()
-	pass
+	return
 
 
 func strike(target, power: int) -> void: # target is either voxel or subvoxel
 	if target != null:
-		if !anvilBounds.has_point(Vector2(stepify(target.translation.x + smithingGrid.translation.x - 0.25, 0.1), \
-			stepify(target.translation.z + smithingGrid.translation.z - 0.05, 0.1))): 
-			print(var2str(Vector2(stepify(target.translation.x + smithingGrid.translation.x - 0.25, 0.1), \
-			stepify(target.translation.z + smithingGrid.translation.z - 0.05, 0.1))))
+		if !anvilBounds.has_point(Vector2(stepify(target.translation.x + anvilSmithingGrid.translation.x - 0.25, 0.1), \
+			stepify(target.translation.z + anvilSmithingGrid.translation.z - 0.05, 0.1))): 
+			print(var2str(Vector2(stepify(target.translation.x + anvilSmithingGrid.translation.x - 0.25, 0.1), \
+			stepify(target.translation.z + anvilSmithingGrid.translation.z - 0.05, 0.1))))
 			print("strike() - target outside anvil grid!")
 			return
 		if target is Voxel:
@@ -170,22 +186,22 @@ func strike(target, power: int) -> void: # target is either voxel or subvoxel
 				print("action: precise strike")
 				
 				# punch
-				if pritchelHole.has_point(Vector2(stepify(target.translation.x + smithingGrid.translation.x - 0.25, 0.1), \
-					stepify(target.translation.z + smithingGrid.translation.z - 0.05, 0.1))): 
+				if pritchelHole.has_point(Vector2(stepify(target.translation.x + anvilSmithingGrid.translation.x - 0.25, 0.1), \
+					stepify(target.translation.z + anvilSmithingGrid.translation.z - 0.05, 0.1))): 
 					print("action: punch")
-					smithingGrid.destroyVoxel(target.gridPosition)
+					anvilSmithingGrid.destroyVoxel(target.gridPosition)
 					return
 				
-				var ahead: bool = smithingGrid.isPositionValid(target.gridPosition + cameraForward)\
-					 && smithingGrid.doesVoxelExist(target.gridPosition + cameraForward)
-				var behind: bool = smithingGrid.isPositionValid(target.gridPosition + cameraBack)\
-					 && smithingGrid.doesVoxelExist(target.gridPosition + cameraBack)
+				var ahead: bool = anvilSmithingGrid.isPositionValid(target.gridPosition + cameraForward)\
+					 && anvilSmithingGrid.doesVoxelExist(target.gridPosition + cameraForward)
+				var behind: bool = anvilSmithingGrid.isPositionValid(target.gridPosition + cameraBack)\
+					 && anvilSmithingGrid.doesVoxelExist(target.gridPosition + cameraBack)
 					
 				if !behind: # draw
 					print("action: draw")
 					target.draw(cameraForward, cameraUp)
 				elif !ahead: # create
-					smithingGrid.createVoxel(target.gridPosition + cameraForward)
+					anvilSmithingGrid.createVoxel(target.gridPosition + cameraForward)
 				elif ahead:
 					print("action: dish")
 					target.dish(cameraUp)
@@ -197,10 +213,10 @@ func strike(target, power: int) -> void: # target is either voxel or subvoxel
 					neighbors.push_back(target.gridPosition + cameraBack)
 					
 					for targetPos in neighbors:
-						if smithingGrid.isPositionValid(targetPos) && smithingGrid.getVoxel(targetPos) != null:
-							if target.dishUp && smithingGrid.getVoxel(targetPos).dishUp\
-								|| target.dishDown && smithingGrid.getVoxel(targetPos).dishDown:
-								smithingGrid.getVoxel(targetPos).connectDish(targetPos - target.gridPosition, cameraUp)
+						if anvilSmithingGrid.isPositionValid(targetPos) && anvilSmithingGrid.getVoxel(targetPos) != null:
+							if target.dishUp && anvilSmithingGrid.getVoxel(targetPos).dishUp\
+								|| target.dishDown && anvilSmithingGrid.getVoxel(targetPos).dishDown:
+								anvilSmithingGrid.getVoxel(targetPos).connectDish(targetPos - target.gridPosition, cameraUp)
 								target.connectDish(-(targetPos - target.gridPosition), cameraUp)
 								print("connected dish")
 						
@@ -231,13 +247,13 @@ func strike(target, power: int) -> void: # target is either voxel or subvoxel
 				targetList.push_back(target.gridPosition + cameraBack + cameraRight)
 			
 			for targetPos in targetList:
-				if smithingGrid.isPositionValid(targetPos):
-					if smithingGrid.getVoxel(targetPos) == null:
-						smithingGrid.createVoxel(targetPos)
+				if anvilSmithingGrid.isPositionValid(targetPos):
+					if anvilSmithingGrid.getVoxel(targetPos) == null:
+						anvilSmithingGrid.createVoxel(targetPos)
 						print("created voxel at position " + var2str(targetPos))
 					else:
 						if pritchelHole.has_point(Vector2(targetPos.x, targetPos.z)):
-							smithingGrid.destroyVoxel(targetPos)
+							anvilSmithingGrid.destroyVoxel(targetPos)
 						else:
 							print("failed to create voxel - voxel already exists at position " + var2str(targetPos))
 				else: 
@@ -246,7 +262,7 @@ func strike(target, power: int) -> void: # target is either voxel or subvoxel
 			# print("targetPos: " + var2str(target.gridPosition))
 			
 			for targetPos in targetList:
-				if smithingGrid.doesVoxelExist(targetPos) && smithingGrid.getVoxel(targetPos) != null:
+				if anvilSmithingGrid.doesVoxelExist(targetPos) && anvilSmithingGrid.getVoxel(targetPos) != null:
 					# apply heat loss
 					pass
 			pass
@@ -260,109 +276,133 @@ func strike(target, power: int) -> void: # target is either voxel or subvoxel
 		strikeCDTimer.start()
 	else:
 		print("strike() - target is null!")
-	pass
+	return
 
 
 func rotateGridCW() -> void:
-	smithingGrid.rotate_y(deg2rad(-90.0))
+	anvilSmithingGrid.rotate_y(deg2rad(-90.0))
 	
 	var temp = cameraForward
 	cameraForward = cameraLeft;
 	cameraLeft = cameraBack;
 	cameraBack = cameraRight;
 	cameraRight = temp;
-	pass
+	return
 func rotateGridCCW() -> void:
-	smithingGrid.rotate_y(deg2rad(90.0))
+	anvilSmithingGrid.rotate_y(deg2rad(90.0))
 	
 	var temp = cameraForward
 	cameraForward = cameraRight;
 	cameraRight = cameraBack;
 	cameraBack = cameraLeft;
 	cameraLeft = temp;
-	pass
+	return
 func flipGridX() -> void:
-	smithingGrid.rotate_x(deg2rad(180.0))
+	anvilSmithingGrid.rotate_x(deg2rad(180.0))
 	
 	var temp = cameraForward
 	cameraForward = cameraBack
 	cameraBack = temp
 	cameraUp *= -1
-	pass
+	return
 func flipGridZ() -> void:
-	smithingGrid.rotate_z(deg2rad(180.0))
+	anvilSmithingGrid.rotate_z(deg2rad(180.0))
 	
 	var temp = cameraLeft
 	cameraLeft = cameraRight
 	cameraRight = temp
 	cameraUp *= -1
-	pass
+	return
 
 
 func moveGrid(direction: int) -> void:
 	match direction:
 		1: # up
-			if gridBounds.has_point(Vector2((smithingGrid.translation + Vector3.FORWARD * STEP_SIZE).x, \
-			(smithingGrid.translation + Vector3.FORWARD * STEP_SIZE).z)):
-				smithingGrid.translation += Vector3.FORWARD * STEP_SIZE
+			if gridBounds.has_point(Vector2((anvilSmithingGrid.translation + Vector3.FORWARD * STEP_SIZE).x, \
+			(anvilSmithingGrid.translation + Vector3.FORWARD * STEP_SIZE).z)):
+				anvilSmithingGrid.translation += Vector3.FORWARD * STEP_SIZE
 			else:
 				print("moveGrid() - target out of bounds, can't move up!")
 		2: # right
-			if gridBounds.has_point(Vector2((smithingGrid.translation + Vector3.RIGHT * STEP_SIZE).x, \
-			(smithingGrid.translation + Vector3.RIGHT * STEP_SIZE).z)):
-				smithingGrid.translation += Vector3.RIGHT * STEP_SIZE
+			if gridBounds.has_point(Vector2((anvilSmithingGrid.translation + Vector3.RIGHT * STEP_SIZE).x, \
+			(anvilSmithingGrid.translation + Vector3.RIGHT * STEP_SIZE).z)):
+				anvilSmithingGrid.translation += Vector3.RIGHT * STEP_SIZE
 			else:
 				print("moveGrid() - target out of bounds, can't move right!")
 		3: # down
-			if gridBounds.has_point(Vector2((smithingGrid.translation + Vector3.BACK * STEP_SIZE).x, \
-			(smithingGrid.translation + Vector3.BACK * STEP_SIZE).z)):
-				smithingGrid.translation += Vector3.BACK * STEP_SIZE
+			if gridBounds.has_point(Vector2((anvilSmithingGrid.translation + Vector3.BACK * STEP_SIZE).x, \
+			(anvilSmithingGrid.translation + Vector3.BACK * STEP_SIZE).z)):
+				anvilSmithingGrid.translation += Vector3.BACK * STEP_SIZE
 			else:
 				print("moveGrid() - target out of bounds, can't move down!")
 		4: # left
-			if gridBounds.has_point(Vector2((smithingGrid.translation + Vector3.LEFT * STEP_SIZE).x, \
-			(smithingGrid.translation + Vector3.LEFT * STEP_SIZE).z)):
-				smithingGrid.translation += Vector3.LEFT * STEP_SIZE
+			if gridBounds.has_point(Vector2((anvilSmithingGrid.translation + Vector3.LEFT * STEP_SIZE).x, \
+			(anvilSmithingGrid.translation + Vector3.LEFT * STEP_SIZE).z)):
+				anvilSmithingGrid.translation += Vector3.LEFT * STEP_SIZE
 			else:
 				print("moveGrid() - target out of bounds, can't move left!")
-	pass
+	return
 
 
-func addIngot(ingot: Ingot) -> void:
-	if smithingGrid != null:
-		if ingot.forgingMat.material.matType == smithingGrid.forgingMat.material.matType: # null error, fix later
-			smithingGrid.voxelPool += 10
+func addIngot(newIngot: Ingot) -> void:
+	if anvilSmithingGrid:
+		if newIngot.ingotData.forgingMat.material.matType == anvilSmithingGrid.sgData.forgingMat.material.matType:
+			anvilSmithingGrid.sgData.voxelPool += 10
 			print("addIngot - increased voxel pool")
 		else:
 			print("addIngot - incompatible materialTypes!")
-			print("smithingGrid materialType: " + var2str(smithingGrid.forgingMat.material.matType))
-			print("ingot materialType: " + var2str(ingot.forgingMat.material.matType))
-	else:
-		# create new smithingGrid using the ingot's materialType
-		smithingGrid = smithingGridTemplate.instance()
-		smithingGrid.initGrid(ingot.forgingMat)
-		add_child(smithingGrid)
-		smithingGrid.translation = gridOrigin.translation
-		smithingGrid.createIngot()
+			print("smithingGrid materialType: " + var2str(anvilSmithingGrid.sgData.forgingMat.material.matType))
+			print("ingot materialType: " + var2str(newIngot.ingotData.forgingMat.material.matType))
+			return
+	elif anvilPattern:
+		anvilIngot = newIngot
+		createSmithingGrid()
 		print("addIngot - created new smithingGrid")
-			
-	pass
+	else:
+		print("addIngot() - no existing grid or pattern!")
+	return
+
+
+# creates a new smithing grid using the anvil's ingot and pattern
+func createSmithingGrid() -> void:
+	if !anvilIngot:
+		print("createSmithingGrid() - ingot is null! ")
+		return
+	if !anvilPattern:
+		print("createSmithingGrid() - pattern is null! ")
+		return
+	
+	var newSmithingGrid: SmithingGrid = Globals.smithingGridTemplate.instance()
+	add_child(newSmithingGrid)
+	newSmithingGrid.createSGData(anvilIngot.ingotData.forgingMat, anvilPattern.patternData)
+	newSmithingGrid.initSmithingGrid(newSmithingGrid.sgData)
+	anvilSmithingGrid = newSmithingGrid
+	anvilSmithingGrid.createIngot()
+	anvilSmithingGrid.store(gridOrigin.get_global_transform())
+	
+	anvilIngot.queue_free()
+	anvilIngot = null
+	return
+
+
+func addPatternGrid(newGrid: Pattern) -> void:
+	return
 
 
 # compares active smithingGrid to active patternGrid
 # should also update voxels remaining
 func checkSmithingCompletion() -> void:
-	pass
+	return
 
 
 func _on_strikeTimer_timeout():
 	strikePower = 0
-	pass
+	return
 
 
 func _on_strikeCDTimer_timeout():
 	# make hammer model invisible
-	pass 
+	return
 
 
 func zoomCamera(delta: float) -> void:
@@ -372,8 +412,8 @@ func zoomCamera(delta: float) -> void:
 	zoomDir *= zoomSpeedDamp
 	if abs(zoomDir) <= 0.0001:
 		zoomDir = 0
-	pass
+	return
 
 
 func resetZoom(delta: float) -> void:
-	pass
+	return

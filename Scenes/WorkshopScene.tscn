@@ -4,15 +4,18 @@
 [ext_resource path="res://Materials/TestFloorMat.tres" type="Material" id=2]
 [ext_resource path="res://Scenes/WorkshopAnvil.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Scripts/WorkshopScene.gd" type="Script" id=5]
+[ext_resource path="res://Scripts/Workshop/WorkshopScene.gd" type="Script" id=5]
 
 [sub_resource type="CubeMesh" id=1]
+size = Vector3( 5, 2, 5 )
 
 [sub_resource type="BoxShape" id=2]
-extents = Vector3( 10, 0.25, 10 )
+extents = Vector3( 25, 0.25, 25 )
 
 [node name="WorkshopScene" type="Spatial"]
 script = ExtResource( 5 )
+
+[node name="FreeItems" type="Spatial" parent="."]
 
 [node name="Environment" type="Spatial" parent="."]
 

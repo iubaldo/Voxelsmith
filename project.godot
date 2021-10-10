@@ -9,27 +9,82 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "ComponentType",
+"class": "BladeSwordComponent",
+"language": "GDScript",
+"path": "res://Scripts/Items/Smithing/Components/BladeSwordComponent.gd"
+}, {
+"base": "ItemData",
+"class": "ComponentItem",
+"language": "GDScript",
+"path": "res://Scripts/Items/Smithing/Components/ComponentItem.gd"
+}, {
+"base": "Resource",
+"class": "ComponentType",
+"language": "GDScript",
+"path": "res://Scripts/Items/Smithing/Components/ComponentType.gd"
+}, {
 "base": "Resource",
 "class": "ForgingMaterial",
 "language": "GDScript",
 "path": "res://Scripts/Smithing/Materials/ForgingMaterial.gd"
 }, {
-"base": "Node",
+"base": "Item",
 "class": "Ingot",
 "language": "GDScript",
-"path": "res://Scripts/Smithing/Ingot.gd"
+"path": "res://Scripts/Items/Smithing/Ingot.gd"
+}, {
+"base": "ItemData",
+"class": "IngotData",
+"language": "GDScript",
+"path": "res://Scripts/Items/Smithing/IngotData.gd"
 }, {
 "base": "Spatial",
 "class": "Interactable",
 "language": "GDScript",
 "path": "res://Scripts/Interactable.gd"
 }, {
-"base": "Node",
-"class": "PatternGrid",
+"base": "Resource",
+"class": "Inventory",
 "language": "GDScript",
-"path": "res://Scripts/Smithing/PatternGrid.gd"
+"path": "res://Scripts/Inventory/Inventory.gd"
+}, {
+"base": "RigidBody",
+"class": "Item",
+"language": "GDScript",
+"path": "res://Scripts/Items/Item.gd"
+}, {
+"base": "Resource",
+"class": "ItemData",
+"language": "GDScript",
+"path": "res://Scripts/Items/ItemData.gd"
+}, {
+"base": "Resource",
+"class": "MaterialType",
+"language": "GDScript",
+"path": "res://Scripts/Smithing/Materials/MaterialType.gd"
+}, {
+"base": "Item",
+"class": "Pattern",
+"language": "GDScript",
+"path": "res://Scripts/Items/Smithing/Patterns/Pattern.gd"
+}, {
+"base": "ItemData",
+"class": "PatternData",
+"language": "GDScript",
+"path": "res://Scripts/Items/Smithing/Patterns/PatternData.gd"
 }, {
 "base": "Spatial",
+"class": "PlayerInventory",
+"language": "GDScript",
+"path": "res://Scripts/Inventory/PlayerInventory.gd"
+}, {
+"base": "ItemData",
+"class": "SGData",
+"language": "GDScript",
+"path": "res://Scripts/Items/Smithing/SmithingGridData.gd"
+}, {
+"base": "Item",
 "class": "SmithingGrid",
 "language": "GDScript",
 "path": "res://Scripts/Smithing/SmithingGrid.gd"
@@ -40,24 +95,53 @@ _global_script_classes=[ {
 "path": "res://Scripts/Smithing/Voxels/Subvoxel.gd"
 }, {
 "base": "MaterialType",
-"class": "Vallum",
+"class": "VallumMaterial",
 "language": "GDScript",
 "path": "res://Scripts/Smithing/Materials/Vallum.gd"
 }, {
-"base": "Spatial",
+"base": "StaticBody",
 "class": "Voxel",
 "language": "GDScript",
 "path": "res://Scripts/Smithing/Voxels/Voxel.gd"
+}, {
+"base": "Interactable",
+"class": "WorkshopAnvil",
+"language": "GDScript",
+"path": "res://Scripts/Workshop/WorkshopAnvil.gd"
+}, {
+"base": "Interactable",
+"class": "WorkshopForge",
+"language": "GDScript",
+"path": "res://Scripts/Workshop/WorkshopForge.gd"
+}, {
+"base": "Spatial",
+"class": "WorkshopScene",
+"language": "GDScript",
+"path": "res://Scripts/Workshop/WorkshopScene.gd"
 } ]
 _global_script_class_icons={
+"BladeSwordComponent": "",
+"ComponentItem": "",
+"ComponentType": "",
 "ForgingMaterial": "",
 "Ingot": "",
+"IngotData": "",
 "Interactable": "",
-"PatternGrid": "",
+"Inventory": "",
+"Item": "",
+"ItemData": "",
+"MaterialType": "",
+"Pattern": "",
+"PatternData": "",
+"PlayerInventory": "",
+"SGData": "",
 "SmithingGrid": "",
 "Subvoxel": "",
-"Vallum": "",
-"Voxel": ""
+"VallumMaterial": "",
+"Voxel": "",
+"WorkshopAnvil": "",
+"WorkshopForge": "",
+"WorkshopScene": ""
 }
 
 [application]
@@ -68,13 +152,14 @@ config/icon="res://icon.png"
 
 [autoload]
 
-MaterialType="*res://Scripts/Smithing/Materials/MaterialType.gd"
 Globals="*res://Scripts/Globals.gd"
 
 [debug]
 
 gdscript/warnings/unused_variable=false
 gdscript/warnings/unused_argument=false
+gdscript/warnings/narrowing_conversion=false
+gdscript/warnings/integer_division=false
 
 [global]
 
@@ -172,6 +257,11 @@ toggleSubvoxelMode={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":84,"unicode":0,"echo":false,"script":null)
  ]
 }
+dropItem={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":81,"unicode":0,"echo":false,"script":null)
+ ]
+}
 
 [layer_names]
 
@@ -180,6 +270,8 @@ toggleSubvoxelMode={
 3d_physics/layer_3="Interactable"
 3d_physics/layer_4="Voxel"
 3d_physics/layer_5="Subvoxel"
+3d_physics/layer_6="Item"
+3d_physics/layer_7="StoredItem"
 
 [physics]
 

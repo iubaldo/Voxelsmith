@@ -1,13 +1,14 @@
-extends Node
-
-# a virtual class that defines types of forging materials
+extends Resource
+class_name MaterialType
+# a virtual class defining types of materials used for forging
 
 # constant attributes
 onready var colorGradient: Gradient
 onready var temperGradient: Gradient
 
-enum materialTypes { Vallum, Viridium, Ostinium, Sitrium, Albanite }
+enum materialTypes { Vallum, Viridium, Ostinium, Sitrium, Albanite, Custom }
 var matType
+var matName: String
 
 var heatResistance: int # range(-10, 10), determines how long to heat up/cool down
 var smeltingTemp: int # determines max heat before melting

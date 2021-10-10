@@ -1,10 +1,11 @@
 extends MaterialType
-class_name Vallum
+class_name VallumMaterial
 
 # an iron-like forging material
 
 func _init():
 	matType = materialTypes.Vallum
+	matName = "Vallum"
 	
 	heatResistance = 5 # range(-10, 10), determines how long to heat up/cool down
 	smeltingTemp = 2000 # determines max heat before melting
@@ -25,4 +26,4 @@ func _init():
 	weight = 50 # range (1, 100), determines final product's weight by (final weight = # of subvoxels * 0.04 * weight * density)
 	toughness = 50 # range (1, 100), determines final product's durability
 	
-	pass
+	return

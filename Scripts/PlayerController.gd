@@ -4,7 +4,11 @@ extends KinematicBody
 # note: does not govern controls for workstations
 
 onready var playerCamera = $CameraPivot/Camera
-onready var interactRaycast = $InteractRayCast
+onready var playerInventory = $CameraPivot/PlayerInventory
+onready var interactRaycast = $CameraPivot/Camera/InteractRayCast
+onready var playerCrosshair = $CameraPivot/Camera/CenterContainer/Crosshair
+
+var workshopScene: WorkshopScene
 
 var velocity = Vector3()
 var maxSpeed = 5
@@ -13,51 +17,94 @@ const GRAVITY = -30
 var mouseSensitivity = 0.003 # radians/pixel, for each pixel the mouse moves, camera rotates by 0.003 radians
 var usingController = false
 
-var selectedWorkstation = null
-var activeWorkstation = null
+
+func _ready():
+	workshopScene = get_parent()
+	return
+
 
 func _process(delta):
-	if activeWorkstation == null:
+	if Globals.activeWorkstation == null:
 		if interactRaycast.is_colliding():
-			if selectedWorkstation != null && interactRaycast.get_collider() != selectedWorkstation:
-				selectedWorkstation.isSelected = false
-			selectedWorkstation = interactRaycast.get_collider()
-			selectedWorkstation.isSelected = true
+			if interactRaycast.get_collider().is_in_group("Items") || interactRaycast.get_collider().is_in_group("Interactable"):
+				playerCrosshair.visible = true
+			
+			if Globals.selectedWorkstation != null && interactRaycast.get_collider() != Globals.selectedWorkstation:
+				Globals.selectedWorkstation = null
+			Globals.selectedWorkstation = interactRaycast.get_collider()
 		else:
-			if selectedWorkstation != null:
-				selectedWorkstation.isSelected = false
-	pass
+			playerCrosshair.visible = false
+			if Globals.selectedWorkstation != null:
+				Globals.selectedWorkstation = null
+	else:
+		playerCrosshair.visible = false
+	return
 
 
 func _physics_process(delta):
-	if activeWorkstation == null:
+	if Globals.activeWorkstation == null:
 		velocity.y += GRAVITY * delta
 		var targetVelocity = handleMoveInput() * maxSpeed
 		velocity.x = targetVelocity.x
 		velocity.z = targetVelocity.z
 		
 		velocity = move_and_slide(velocity, Vector3.UP, true)
-	pass
+	return
 
 
 func _unhandled_input(event):
-	if activeWorkstation == null:
+	if !Globals.activeWorkstation:
 		if event is InputEventMouseMotion && Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 			rotate_y(-event.relative.x * mouseSensitivity)
 			$CameraPivot.rotate_x(-event.relative.y * mouseSensitivity)
 			$CameraPivot.rotation.x = clamp($CameraPivot.rotation.x, -1.2, 1.2)
+			
+		if event.is_action_pressed("debug_addIngot"):
+			var newForgingMat: ForgingMaterial = Globals.forgingMaterialTemplate.new()
+			newForgingMat.initForgingMaterial(Globals.vallumTemplate.new())
+			var newIngotData: IngotData = Globals.ingotDataTemplate.new()
+			newIngotData.forgingMat = newForgingMat		
+			var newIngot: Ingot = Globals.ingotTemplate.instance()
+			newIngot.ingotData = newIngotData
+			newIngot.itemData = newIngotData
+			
+			workshopScene.freeItems.add_child(newIngot)
+			newIngot.global_transform.origin = playerCamera.global_transform.basis.z
 		
+	# workstation activation/deactivation
 	if event.is_action_pressed("interact"):
-		if selectedWorkstation != null && activeWorkstation == null:
-			activeWorkstation = selectedWorkstation
-			selectedWorkstation.isActive = true
-			selectedWorkstation.onActive()
-	if event.is_action_pressed("ui_cancel") && activeWorkstation != null:
-		selectedWorkstation.isActive = false
-		activeWorkstation.onDeactive()
-		activeWorkstation = null
+		if Globals.selectedWorkstation && !Globals.activeWorkstation:
+			Globals.activeWorkstation = Globals.selectedWorkstation
+			Globals.selectedWorkstation.onActive()
+	if event.is_action_pressed("ui_cancel") && Globals.activeWorkstation:
+		Globals.activeWorkstation.onDeactive()
+		Globals.activeWorkstation = null
 		playerCamera.current = true
-	pass
+		
+	# secondary action on workstations
+	if event.is_action_pressed("secondaryAction") && !Globals.activeWorkstation:
+		if Globals.isAnvilSelected():
+			if workshopScene.anvil.anvilSmithingGrid:
+				playerInventory.grabItem(workshopScene.anvil.anvilSmithingGrid)
+				workshopScene.anvil.anvilSmithingGrid = null
+			elif workshopScene.anvil.anvilPattern:
+				playerInventory.grabItem(workshopScene.anvil.anvilPattern)
+				workshopScene.anvil.anvilPattern = null
+			elif workshopScene.anvil.anvilIngot:
+				playerInventory.grabItem(workshopScene.anvil.anvilIngot)
+				workshopScene.anvil.anvilIngot = null
+			elif !workshopScene.anvil.anvilIngot && playerInventory.heldItem is Ingot:
+				workshopScene.anvil.anvilIngot = playerInventory.heldItem
+				workshopScene.anvil.anvilIngot.store(workshopScene.anvil.gridOrigin.get_global_transform())
+				playerInventory.heldItem = null
+				
+	
+	if event.is_action_pressed("secondaryAction") && interactRaycast.get_collider() \
+		&& interactRaycast.get_collider().is_in_group("Items"):
+		playerInventory.grabItem(interactRaycast.get_collider())
+	if event.is_action_pressed("dropItem") && playerInventory.heldItem:
+		playerInventory.dropHeldItem()
+	return
 
 
 func handleMoveInput() -> Vector3:

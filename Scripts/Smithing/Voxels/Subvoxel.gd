@@ -5,27 +5,28 @@ class_name Subvoxel
 onready var outlineMesh = $OutlineMesh
 onready var collider = $SubvoxelMesh/SubvoxelHitbox/CollisionShape
 
+var smithingGrid: SmithingGrid # the subvoxel's parent smithingGrid, inherited from parent voxel
 var parentVoxel: Voxel
 var gridPosition: Vector3
 
 func _ready():
 	add_to_group("Subvoxels")
-	pass
+	return
 
 
 func toggleSubvoxelCollider() -> void:
 	collider.disabled = !collider.disabled
-	pass
+	return
 
 
 # note: these should only call when subvoxelMode is true and anvil is active
 func _on_SubvoxelHitbox_mouse_entered():
-	if Globals.subvoxelMode && Globals.anvilActive:
+	if Globals.subvoxelMode && Globals.isAnvilActive():
 		Globals.selectedSubvoxel = self
 		outlineMesh.visible = true
-	pass
+	return
 func _on_SubvoxelHitbox_mouse_exited():
-	if Globals.subvoxelMode && Globals.anvilActive:
+	if Globals.subvoxelMode && Globals.isAnvilActive():
 		Globals.selectedSubvoxel = self
 		outlineMesh.visible = false
-	pass
+	return
