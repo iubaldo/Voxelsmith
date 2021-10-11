@@ -14,7 +14,7 @@ extents = Vector3( 0.5, 0.5, 0.5 )
 [node name="Voxel" type="StaticBody"]
 transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0 )
 input_capture_on_drag = true
-collision_layer = 40
+collision_layer = 8
 collision_mask = 39
 script = ExtResource( 3 )
 
@@ -486,5 +486,8 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, -2 )
 [node name="Subvoxel4" parent="Subvoxels/Layer4/Row4" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -2, -2 )
 
-[node name="CollisionShape" type="CollisionShape" parent="."]
+[node name="VoxelHitbox" type="CollisionShape" parent="."]
 shape = SubResource( 2 )
+
+[connection signal="mouse_entered" from="." to="." method="_on_VoxelHitbox_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_VoxelHitbox_mouse_exited"]

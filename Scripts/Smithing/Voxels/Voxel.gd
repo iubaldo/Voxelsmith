@@ -4,7 +4,7 @@ class_name Voxel
 export (Resource) var forgingMat
 
 onready var outlineMesh = $OutlineMesh
-onready var collider = $CollisionShape
+onready var collider = $VoxelHitbox
 
 export var subvoxelColor: Color # voxel doesn't need its own color, so we return this down to the subvoxels instead
 var smithingGrid # the voxel's parent smithingGrid
