@@ -1,5 +1,7 @@
 extends Spatial
 class_name Interactable
+# defines objects that can be interacted with such as workstations and inventories
+# maybe abstract this later into a workstations and storage script
 
 onready var label3D
 onready var workstationCamera

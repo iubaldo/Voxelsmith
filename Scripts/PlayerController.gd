@@ -63,13 +63,12 @@ func _unhandled_input(event):
 			var newForgingMat: ForgingMaterial = Globals.forgingMaterialTemplate.new()
 			newForgingMat.initForgingMaterial(Globals.vallumTemplate.new())
 			var newIngotData: IngotData = Globals.ingotDataTemplate.new()
-			newIngotData.forgingMat = newForgingMat		
+			newIngotData.forgingMat = newForgingMat
 			var newIngot: Ingot = Globals.ingotTemplate.instance()
-			newIngot.ingotData = newIngotData
-			newIngot.itemData = newIngotData
+			newIngot.setIngotData(newIngotData)
 			
 			workshopScene.freeItems.add_child(newIngot)
-			newIngot.global_transform.origin = playerCamera.global_transform.basis.z
+			newIngot.global_transform.origin = playerCamera.global_transform.origin + playerCamera.global_transform.basis.z * -4
 		
 	# workstation activation/deactivation
 	if event.is_action_pressed("interact"):

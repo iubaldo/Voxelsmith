@@ -3,16 +3,27 @@ class_name PlayerInventory
 
 onready var itemHolder: Spatial = $ItemHolder
 
+# store the inventory in a resource later
 var playerInventory = [] # currently unused, but would be used to store a larger inventory of items
-var heldItem: Item = null
+var heldItem: Item = null # should always be the first inventory slot once that's implemented
 var maxDistFromPlayer: float = 2.5
 
+
+func _ready():
+#	for workstation in get_tree().get_root().get_node("WorkshopScene").get_node("Workstations").get_children():
+#		workstation.get_node("InternalInventory").connect("storedItem", self, "dropHeldItem")
+#		workstation.get_node("InternalInventory").connect("retrievedItem", self, "grabItem")
+	return
+
+
 func _physics_process(delta):
+	# keeps the heldItem in the player's "hand"
 	if heldItem:
 		var a = itemHolder.get_global_transform().origin
 		var b = heldItem.get_global_transform().origin
 		heldItem.set_linear_velocity((a - b) * 10)
 	
+	# drops the heldItem if it goes too far away from the player
 	if heldItem&& itemHolder.get_global_transform().origin.distance_to(heldItem.get_global_transform().origin) \
 		> maxDistFromPlayer:
 		print("heldItem is too far from player, dropping!")
@@ -20,6 +31,7 @@ func _physics_process(delta):
 	return
 
 
+# heldItem functions
 func grabItem(item: Item) -> void:
 	if heldItem != null:
 		dropHeldItem()

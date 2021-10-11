@@ -3,8 +3,8 @@ class_name WorkshopScene
 
 onready var player = $Player
 onready var freeItems: Spatial = $FreeItems # used to store any items in the physical space not currently being stored elsewhere
-onready var anvil: WorkshopAnvil = $Environment/WorkshopAnvil
-onready var forge: WorkshopForge = $Environment/WorkshopForge
+onready var anvil: WorkshopAnvil = $Environment/Workstations/WorkshopAnvil
+onready var forge: WorkshopForge = $Environment/Workstations/WorkshopForge
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

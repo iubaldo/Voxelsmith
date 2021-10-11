@@ -385,10 +385,6 @@ func createSmithingGrid() -> void:
 	return
 
 
-func addPatternGrid(newGrid: Pattern) -> void:
-	return
-
-
 # compares active smithingGrid to active patternGrid
 # should also update voxels remaining
 func checkSmithingCompletion() -> void:

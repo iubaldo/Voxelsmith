@@ -1,16 +1,27 @@
-extends Node
+extends Inventory
+class_name AnvilInventory
+# note: disallow a pattern or ingot to be added while a smithingGrid is on the anvil
+# note: return pattern to player inventory after creating a smithingGrid
+
+func _init():
+	allowedItemTypes = [ItemData.itemTypes.smithingGrid, ItemData.itemTypes.pattern, ItemData.itemTypes.ingot]
+	return
 
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+# override
+func storeItem(item: Item) -> void:
+	if inventory.empty():
+		print("storeItem() - inventory is full!")
+		return
+	if !allowedItemTypes.has(item.itemData.itemTypes):
+		print("storeItem() - non-whitelisted itemType!")
+		return
+	
+	match (item.itemData.itemTypes):
+		ItemData.itemTypes.smithingGrid:
+			if !inventory[0]: 
+				inventory[0] = item
+			else:
+				#swap
+				pass
+	return
