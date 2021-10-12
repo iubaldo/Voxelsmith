@@ -18,9 +18,14 @@ onready var ingotDataTemplate = load("res://Scripts/Items/Smithing/IngotData.gd"
 onready var sgDataTemplate = load("res://Scripts/Items/Smithing/SmithingGridData.gd")
 onready var patternDataTemplate = load("res://Scripts/Items/Smithing/Patterns/PatternData.gd")
 
+# game data
+onready var inventoryTemplate = load("res://Scripts/Inventory/Inventory.gd")
+onready var anvilInventoryTemplate = load("res://Scripts/Inventory/AnvilInventory.gd")
+onready var forgeInventoryTemplate = load("res://Scripts/Inventory/ForgeInventory.gd")
+
 var subvoxelMode: bool = false # whether or not to target subvoxels
-var selectedWorkstation: Interactable = null
-var activeWorkstation: Interactable = null
+var selectedWorkstation: Workstation = null
+var activeWorkstation: Workstation = null
 
 var selectedSubvoxel: Subvoxel = null
 var selectedVoxel: Voxel = null
@@ -51,18 +56,18 @@ func resetTargets() -> void:
 
 
 func isAnvilActive() -> bool:
-	if activeWorkstation != null && activeWorkstation.workstationType == Interactable.workstationTypes.anvil:
+	if activeWorkstation != null && activeWorkstation.workstationType == Workstation.workstationTypes.anvil:
 		return true
 	return false
 func isAnvilSelected() -> bool:
-	if selectedWorkstation != null && selectedWorkstation.workstationType == Interactable.workstationTypes.anvil:
+	if selectedWorkstation != null && selectedWorkstation.workstationType == Workstation.workstationTypes.anvil:
 		return true
 	return false
 func isForgeActive() -> bool:
-	if activeWorkstation != null && activeWorkstation.workstationType == Interactable.workstationTypes.forge:
+	if activeWorkstation != null && activeWorkstation.workstationType == Workstation.workstationTypes.forge:
 		return true
 	return false
 func isForgeSelected() -> bool:
-	if selectedWorkstation != null && selectedWorkstation.workstationType == Interactable.workstationTypes.forge:
+	if selectedWorkstation != null && selectedWorkstation.workstationType == Workstation.workstationTypes.forge:
 		return true
 	return false

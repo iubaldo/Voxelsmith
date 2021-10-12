@@ -10,9 +10,14 @@ var maxDistFromPlayer: float = 2.5
 
 
 func _ready():
-#	for workstation in get_tree().get_root().get_node("WorkshopScene").get_node("Workstations").get_children():
-#		workstation.get_node("InternalInventory").connect("storedItem", self, "dropHeldItem")
-#		workstation.get_node("InternalInventory").connect("retrievedItem", self, "grabItem")
+	add_to_group("PlayerInventory")
+	return
+
+
+func connectInventorySignals(inventory: Inventory) -> void:
+	# storing as a throwaway var stops Godot from throwing warnings
+	var _placeholder = inventory.connect("storedItem", self, "dropHeldItem") 
+	var _placeholder2 = inventory.connect("retrievedItem", self, "grabItem")
 	return
 
 

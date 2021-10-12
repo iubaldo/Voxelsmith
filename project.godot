@@ -52,7 +52,7 @@ _global_script_classes=[ {
 "base": "Spatial",
 "class": "Interactable",
 "language": "GDScript",
-"path": "res://Scripts/Interactable.gd"
+"path": "res://Scripts/Interactable/Interactable.gd"
 }, {
 "base": "Resource",
 "class": "Inventory",
@@ -114,20 +114,25 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scripts/Smithing/Voxels/Voxel.gd"
 }, {
-"base": "Interactable",
+"base": "Workstation",
 "class": "WorkshopAnvil",
 "language": "GDScript",
-"path": "res://Scripts/Workshop/WorkshopAnvil.gd"
+"path": "res://Scripts/Interactable/WorkshopAnvil.gd"
 }, {
-"base": "Interactable",
+"base": "Workstation",
 "class": "WorkshopForge",
 "language": "GDScript",
-"path": "res://Scripts/Workshop/WorkshopForge.gd"
+"path": "res://Scripts/Interactable/WorkshopForge.gd"
 }, {
 "base": "Spatial",
 "class": "WorkshopScene",
 "language": "GDScript",
-"path": "res://Scripts/Workshop/WorkshopScene.gd"
+"path": "res://Scripts/WorkshopScene.gd"
+}, {
+"base": "Interactable",
+"class": "Workstation",
+"language": "GDScript",
+"path": "res://Scripts/Interactable/Workstation.gd"
 } ]
 _global_script_class_icons={
 "AnvilInventory": "",
@@ -153,7 +158,8 @@ _global_script_class_icons={
 "Voxel": "",
 "WorkshopAnvil": "",
 "WorkshopForge": "",
-"WorkshopScene": ""
+"WorkshopScene": "",
+"Workstation": ""
 }
 
 [application]

@@ -1,4 +1,4 @@
-extends Interactable
+extends Workstation
 class_name WorkshopAnvil
 # notes:
 # to check if a pattern has been fulilled, compare matrices for patternGrid and smithingGrid
@@ -53,8 +53,15 @@ func _ready():
 	cameraLeft = -global_transform.basis.x
 	cameraRight = global_transform.basis.x
 	cameraUp = global_transform.basis.y
-	
+	._ready()
 	return
+
+
+func initInternalInventory() -> void:
+	var newAnvilInventory = Globals.anvilInventoryTemplate.new()
+	internalInventory = newAnvilInventory
+	return
+
 
 func _process(delta):
 	zoomCamera(delta)
@@ -63,7 +70,7 @@ func _process(delta):
 	return
 	
 
-func _physics_process(delta):		
+func _physics_process(delta):
 	if Globals.isAnvilActive() && anvilSmithingGrid != null:
 		if strikePower != 0:
 			powerLabel.text = "Strike Power: " + var2str(strikePower)

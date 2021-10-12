@@ -3,6 +3,7 @@ class_name WorkshopScene
 
 onready var player = $Player
 onready var freeItems: Spatial = $FreeItems # used to store any items in the physical space not currently being stored elsewhere
+onready var workstations: Spatial = $Environment/Workstations
 onready var anvil: WorkshopAnvil = $Environment/Workstations/WorkshopAnvil
 onready var forge: WorkshopForge = $Environment/Workstations/WorkshopForge
 

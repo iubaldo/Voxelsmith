@@ -1,4 +1,4 @@
-extends Interactable
+extends Workstation
 class_name WorkshopForge
 # if interacted with, switch to this camera
 # forging code here
@@ -14,7 +14,15 @@ func _ready():
 	label3D = $Label3D
 	workstationCamera = $Camera
 	workstationType = workstationTypes.forge
+	._ready()
 	return
+
+
+func initInteralInventory() -> void:
+	var newForgeInventory = Globals.forgeInventoryTemplate.new()
+	internalInventory = newForgeInventory
+	return
+
 
 func _process(delta):
 	label3D.visible = true if (Globals.selectedWorkstation != null && Globals.selectedWorkstation == self \
