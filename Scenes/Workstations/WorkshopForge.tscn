@@ -83,14 +83,14 @@ shape = SubResource( 6 )
 
 [node name="InternalInventory" type="Spatial" parent="."]
 
-[node name="Slot1" type="Spatial" parent="InternalInventory"]
+[node name="Slot0" type="Spatial" parent="InternalInventory"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.8, 0.9 )
 
-[node name="Slot2" type="Spatial" parent="InternalInventory"]
+[node name="Slot1" type="Spatial" parent="InternalInventory"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.8, 0.9 )
 
-[node name="Slot3" type="Spatial" parent="InternalInventory"]
+[node name="Slot2" type="Spatial" parent="InternalInventory"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.8, 0.348242 )
 
-[node name="Slot4" type="Spatial" parent="InternalInventory"]
+[node name="Slot3" type="Spatial" parent="InternalInventory"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.8, 0.348242 )

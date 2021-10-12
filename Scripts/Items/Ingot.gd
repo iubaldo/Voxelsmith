@@ -3,7 +3,6 @@ class_name Ingot
 # an item that can be used to begin smithing or add voxels to an existing smithingGrid
 # note: maybe have a different color gradient for heating up ingots
 
-export onready var ingotData: IngotData
 var mat: SpatialMaterial
 
 func _ready():
@@ -13,7 +12,8 @@ func _ready():
 	return
 
 
-func setIngotData(newIngotData: IngotData) -> void:
-	ingotData = newIngotData
-	setItemData(ingotData)
+func createItemData(newForgingMat: ForgingMaterial) -> void:
+	var newIngotData: IngotData = Globals.ingotDataTemplate.new()
+	newIngotData.forgingMat = newForgingMat
+	setItemData(newIngotData)
 	return

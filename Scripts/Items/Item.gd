@@ -15,6 +15,11 @@ func _ready():
 	return
 
 
+# supposed to be a virtual function, but gdscript doesn't support overloading so ¯\_(ツ)_/¯
+# func createItemData() -> void:
+#	 return
+
+
 func setItemData(newItemData: ItemData) -> void:
 	itemData = newItemData
 	return
@@ -38,8 +43,9 @@ func _physics_process(delta):
 # stores the item into an inventory
 # converts to static, changes collider layer, and lerps to target location
 # ideally use a "time" value to determine how long it takes to lerp to target
+
+# NOTE: use a position + rotation instead of full transform to avoid scale changing
 func store(targetPos: Transform) -> void:
-	print("storing item")
 	mode = RigidBody.MODE_STATIC
 	set_collision_layer_bit(5, false)
 	set_collision_layer_bit(6, true)

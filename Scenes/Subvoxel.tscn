@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Materials/Voxel/VoxelOutlineMat.tres" type="Material" id=1]
 [ext_resource path="res://Materials/Voxel/VoxelMat.tres" type="Material" id=2]
-[ext_resource path="res://Scripts/Smithing/Voxels/Subvoxel.gd" type="Script" id=3]
+[ext_resource path="res://Scripts/Subvoxel.gd" type="Script" id=3]
 
 [sub_resource type="CubeMesh" id=1]
 resource_local_to_scene = true

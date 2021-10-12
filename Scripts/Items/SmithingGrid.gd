@@ -3,8 +3,6 @@ class_name SmithingGrid
 # contains the physical voxels that make up a piece of worked metal
 # note: might have to replace Rect2 variables with AABB counterparts for smithing in 3d
 
-export onready var sgData: SGData # stores the grid's itemData
-
 onready var centerVoxelOutline = $CenterVoxelOutline
 onready var collisionShape: CollisionShape = $CollisionShape
 
@@ -22,28 +20,25 @@ func _ready():
 	return
 
 
-func initSmithingGrid(data: SGData) -> void:
-	sgData = data
-	gridWidth = sgData.gridWidth
-	gridHeight = sgData.gridHeight
-	gridCenter = sgData.gridCenter
-	gridBounds = sgData.gridBounds
-	
-	initGrid(sgData.forgingMat)
-	pass
-
-
-func createSGData(newForgingMat: ForgingMaterial, newPatternData: PatternData) -> void:
+func createItemData(newForgingMat: ForgingMaterial, newPatternData: PatternData) -> void:
 	var newSGData: SGData = Globals.sgDataTemplate.new()
 	newSGData.forgingMat = newForgingMat
 	newSGData.patternData = newPatternData
 	newSGData.component = newSGData.patternData.component
-	setSGData(newSGData)
+	setItemData(newSGData)
+	initSmithingGrid()
 	return
-func setSGData(newSGData: SGData) -> void:
-	sgData = newSGData
-	setItemData(sgData)
-	return
+
+
+func initSmithingGrid() -> void:
+	gridWidth = itemData.gridWidth
+	gridHeight = itemData.gridHeight
+	gridCenter = itemData.gridCenter
+	gridBounds = itemData.gridBounds
+	
+	initGrid(itemData.forgingMat)
+	createIngot()
+	pass
 
 
 func _physics_process(delta):
@@ -65,7 +60,7 @@ func debugPrintGridMatrix() -> void:
 	for y in gridHeight:
 		var result = ""
 		for x in gridWidth:
-			if sgData.gridMatrix[x][y] != null:
+			if itemData.gridMatrix[x][y] != null:
 				result = result + "*"
 			else:
 				result = result + "-"
@@ -76,16 +71,16 @@ func debugPrintGridMatrix() -> void:
 
 # initializes the gridMatrix and fills it with null values
 func initGrid(var mat: ForgingMaterial) -> void:
-	if !sgData:
-		print("initGrid() - sgData is null!")
+	if !itemData:
+		print("initGrid() - itemData is null!")
 		return
 	
-	sgData.forgingMat = mat
+	itemData.forgingMat = mat
 	
 	for x in gridWidth:
-		sgData.gridMatrix.append([])
+		itemData.gridMatrix.append([])
 		for y in gridHeight:
-			sgData.gridMatrix[x].append(null)
+			itemData.gridMatrix[x].append(null)
 	return 
 
 
@@ -104,10 +99,10 @@ func createVoxel(targetPos: Vector3) -> void: # grid coords
 		var newVoxel = Globals.voxelTemplate.instance()
 		add_child(newVoxel)
 		newVoxel.translation = Vector3((targetPos.x - gridCenter.x) * STEP_SIZE, 0, (targetPos.z - gridCenter.y) * STEP_SIZE) # worldspace coords
-		newVoxel.forgingMat = sgData.forgingMat
+		newVoxel.forgingMat = itemData.forgingMat
 		newVoxel.gridPosition = targetPos
 		newVoxel.normalizedGridPosition = Vector3(targetPos.x - gridCenter.x, 0, targetPos.z - gridCenter.y)
-		sgData.gridMatrix[targetPos.x][targetPos.z] = newVoxel # grid coords
+		itemData.gridMatrix[targetPos.x][targetPos.z] = newVoxel # grid coords
 	else:
 		print("createVoxel - targetPos " + var2str(Vector2(targetPos.x, targetPos.z)) + " out of bounds!")
 	return
@@ -115,8 +110,8 @@ func createVoxel(targetPos: Vector3) -> void: # grid coords
 
 func destroyVoxel(targetPos: Vector3) -> void: # grid coords
 	if isPositionValid(targetPos):
-		sgData.gridMatrix[targetPos.x][targetPos.z].queue_free()
-		sgData.gridMatrix[targetPos.x][targetPos.z] = null
+		itemData.gridMatrix[targetPos.x][targetPos.z].queue_free()
+		itemData.gridMatrix[targetPos.x][targetPos.z] = null
 	else:
 		print("destroyVoxel - targetPos " + var2str(targetPos) + " out of bounds!")
 	return
@@ -124,7 +119,7 @@ func destroyVoxel(targetPos: Vector3) -> void: # grid coords
 
 func getVoxel(targetPos: Vector3): # grid coords
 	if isPositionValid(targetPos):
-		return sgData.gridMatrix[targetPos.x][targetPos.z]
+		return itemData.gridMatrix[targetPos.x][targetPos.z]
 	
 	print ("getVoxel() - targetPos  " + var2str(targetPos) + " out of bounds!")
 	return null
@@ -132,7 +127,7 @@ func getVoxel(targetPos: Vector3): # grid coords
 
 func doesVoxelExist(targetPos: Vector3) -> bool: # grid coords
 	if isPositionValid(targetPos):
-		return sgData.gridMatrix[targetPos.x][targetPos.z] != null
+		return itemData.gridMatrix[targetPos.x][targetPos.z] != null
 	
 	print ("doesVoxelExist() - targetPos  " + var2str(targetPos) + " out of bounds!")
 	return false
@@ -143,7 +138,7 @@ func isPositionValid(targetPos: Vector3) -> bool: # grid coords
 
 
 func getVoxelPosition(targetVoxel: Voxel): # returns Vector3
-	if sgData.gridMatrix.find(targetVoxel):
+	if itemData.gridMatrix.find(targetVoxel):
 		return targetVoxel.gridPosition
 		
 	print("getVoxelPosition() - targetVoxel is null!")
@@ -152,15 +147,15 @@ func getVoxelPosition(targetVoxel: Voxel): # returns Vector3
 
 # used when creating new smithingGrids on the anvil
 func setCollisionShape() -> void:
-	if !sgData.component:
+	if !itemData.component:
 		print("setCollisionShape() - component is null!")
 		return
-	if !sgData.component.gridSize:
+	if !itemData.component.gridSize:
 		print("setCollisionShape() - component gridSize is null!")
 		return
 	
-	collisionShape.shape.extents = sgData.component.gridSize * STEP_SIZE
-	if sgData.component.gridSize.y == 3:
+	collisionShape.shape.extents = itemData.component.gridSize * STEP_SIZE
+	if itemData.component.gridSize.y == 3:
 		get_global_transform().origin += Vector3.UP * STEP_SIZE
 	
 	print(var2str(collisionShape.shape.extents))

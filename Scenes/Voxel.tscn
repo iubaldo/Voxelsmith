@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://Scenes/Smithing/Voxels/Subvoxel.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scenes/Subvoxel.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Materials/Voxel/SelectionMat.tres" type="Material" id=2]
-[ext_resource path="res://Scripts/Smithing/Voxels/Voxel.gd" type="Script" id=3]
+[ext_resource path="res://Scripts/Voxel.gd" type="Script" id=3]
 
 [sub_resource type="CubeMesh" id=1]
 material = ExtResource( 2 )

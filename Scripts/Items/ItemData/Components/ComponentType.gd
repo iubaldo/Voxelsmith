@@ -1,12 +1,13 @@
 extends Resource
 class_name ComponentType
-# describes the kind of component this componentItem or smithingGrid is using
+# a virtual class defining types of components used for weapon assembly
 
 enum componentTypes { blade, guard, handle, pommel }
-var compType
+var componentType
 var gridSize: Vector3 # defines the componentType's standard size
 
 
+# virtual function
 # sets the grid size based on the component type and subtypes, if any
-func setGridSize() -> void:
+func initGridSize() -> void:
 	return

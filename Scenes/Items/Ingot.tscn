@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://Scripts/Items/Smithing/Ingot.gd" type="Script" id=1]
+[ext_resource path="res://Scripts/Items/Ingot.gd" type="Script" id=1]
 [ext_resource path="res://Models/ingot.obj" type="ArrayMesh" id=2]
 [ext_resource path="res://Materials/DefaultIngotMat.tres" type="Material" id=3]
 

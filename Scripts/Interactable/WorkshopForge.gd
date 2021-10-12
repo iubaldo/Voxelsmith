@@ -3,12 +3,10 @@ class_name WorkshopForge
 # if interacted with, switch to this camera
 # forging code here
 
-var inventory
-
+onready var slot0Origin: Spatial = $InternalInventory/Slot0
 onready var slot1Origin: Spatial = $InternalInventory/Slot1
 onready var slot2Origin: Spatial = $InternalInventory/Slot2
 onready var slot3Origin: Spatial = $InternalInventory/Slot3
-onready var slot4Origin: Spatial = $InternalInventory/Slot4
 
 func _ready():
 	label3D = $Label3D
@@ -18,9 +16,13 @@ func _ready():
 	return
 
 
-func initInteralInventory() -> void:
+func initInternalInventory() -> void:
 	var newForgeInventory = Globals.forgeInventoryTemplate.new()
 	internalInventory = newForgeInventory
+	internalInventory.slots[0] = slot0Origin
+	internalInventory.slots[1] = slot1Origin
+	internalInventory.slots[2] = slot2Origin
+	internalInventory.slots[3] = slot3Origin
 	return
 
 

@@ -5,3 +5,8 @@ class_name ItemData
 enum itemTypes { oreChunk, ingot, smithingGrid, component, pattern, mold, crucible, weapon }
 var itemType
 var itemName: String
+
+
+# virtual function
+func setItemName() -> void:
+	return

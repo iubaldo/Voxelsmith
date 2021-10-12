@@ -5,7 +5,9 @@ class_name WorkshopAnvil
 #	need to make a voxel comparison function
 
 onready var anvilGrid = $AnvilGrid
-onready var gridOrigin: Spatial = $GridOrigin
+onready var gridOrigin: Spatial = $InternalInventory/GridOrigin
+onready var patternOrigin: Spatial = $InternalInventory/PatternOrigin
+onready var ingotOrigin: Spatial = $InternalInventory/IngotOrigin
 onready var smithingUI: Control = $SmithingUI
 onready var powerLabel: Label = $SmithingUI/StrikePowerLabel
 onready var strikeTimer: Timer = $StrikeTimer # determines how long before strike is cancelled
@@ -53,6 +55,7 @@ func _ready():
 	cameraLeft = -global_transform.basis.x
 	cameraRight = global_transform.basis.x
 	cameraUp = global_transform.basis.y
+	
 	._ready()
 	return
 
@@ -60,10 +63,16 @@ func _ready():
 func initInternalInventory() -> void:
 	var newAnvilInventory = Globals.anvilInventoryTemplate.new()
 	internalInventory = newAnvilInventory
+	internalInventory.slots[0] = gridOrigin
+	internalInventory.slots[1] = patternOrigin
+	internalInventory.slots[2] = ingotOrigin
 	return
 
 
 func _process(delta):
+	anvilSmithingGrid = internalInventory.inventory[0]
+	anvilPattern = internalInventory.inventory[1]
+	anvilIngot = internalInventory.inventory[2]
 	zoomCamera(delta)
 	label3D.visible = true if (Globals.selectedWorkstation != null && Globals.selectedWorkstation == self \
 		&& !Globals.isAnvilActive()) else false
@@ -101,28 +110,22 @@ func _unhandled_input(event):
 	# debug action, remove later
 	# simulates creating a smithing grid with an existing ingot + pattern
 	if Globals.isAnvilActive() && !anvilSmithingGrid && event.is_action_pressed("debug_addIngot"):
-		# create forging mat (would be inherited from anvilIngot)
-		var newForgingMat: ForgingMaterial = Globals.forgingMaterialTemplate.new()
-		newForgingMat.initForgingMaterial(Globals.vallumTemplate.new())
+		# create forgingMat (would be inherited from anvilIngot)
+		var newForgingMat: ForgingMaterial = Globals.createForgingMaterial(Globals.vallumTemplate.new())
 		
-		# create component (would be inherited from anvilPattern)
-		var newComponent: ComponentType = Globals.bladeSwordComponentTemplate.new()
-		newComponent.swordSubtype = BladeSwordComponent.swordSubtypes.oneHanded
-		newComponent.setGridSize()
+		# create componentType (would be inherited from anvilPattern)
+		var newComponentType: ComponentType = Globals.bladeSwordComponentTemplate.new()
+		newComponentType.swordSubtype = BladeSwordComponent.swordSubtypes.oneHanded
+		newComponentType.initGridSize()
 		
-		# create patternData (would be inherited from anvilPattern)
-		var newPatternData: PatternData = Globals.patternDataTemplate.new()
-		newPatternData.initPatternData(newComponent)
+		# create pattern (would be anvilPattern)
+		var newPattern: Pattern = Globals.createPattern(newComponentType)
 		
 		# create smithingGrid
-		var newSmithingGrid: SmithingGrid = Globals.smithingGridTemplate.instance()
+		var newSmithingGrid: SmithingGrid = Globals.createSmithingGrid(newForgingMat, newPattern.itemData)
 		add_child(newSmithingGrid)
-		newSmithingGrid.createSGData(newForgingMat, newPatternData)
-		newSmithingGrid.initSmithingGrid(newSmithingGrid.sgData)
-		anvilSmithingGrid = newSmithingGrid
-		anvilSmithingGrid.createIngot()
+		internalInventory.storeItem(newSmithingGrid)
 		
-		anvilSmithingGrid.store(gridOrigin.get_global_transform())
 		print("debug addIngot - created new smithingGrid")
 		
 	if Globals.isAnvilActive() && anvilSmithingGrid != null && strikeCDTimer.is_stopped():
@@ -362,7 +365,7 @@ func addIngot(newIngot: Ingot) -> void:
 			print("ingot materialType: " + var2str(newIngot.ingotData.forgingMat.material.matType))
 			return
 	elif anvilPattern:
-		anvilIngot = newIngot
+		internalInventory.storeItem(newIngot)
 		createSmithingGrid()
 		print("addIngot - created new smithingGrid")
 	else:
@@ -379,16 +382,12 @@ func createSmithingGrid() -> void:
 		print("createSmithingGrid() - pattern is null! ")
 		return
 	
-	var newSmithingGrid: SmithingGrid = Globals.smithingGridTemplate.instance()
+	var newSmithingGrid: SmithingGrid = Globals.createSmithingGrid(anvilIngot.itemData.forgingMat, anvilPattern.itemData)
 	add_child(newSmithingGrid)
-	newSmithingGrid.createSGData(anvilIngot.ingotData.forgingMat, anvilPattern.patternData)
-	newSmithingGrid.initSmithingGrid(newSmithingGrid.sgData)
-	anvilSmithingGrid = newSmithingGrid
-	anvilSmithingGrid.createIngot()
-	anvilSmithingGrid.store(gridOrigin.get_global_transform())
+	internalInventory.storeItem(newSmithingGrid)
 	
-	anvilIngot.queue_free()
-	anvilIngot = null
+	anvilIngot.queue_free() # delete the ingot used to create the smithingGrid
+	internalInventory.inventory[2] = null
 	return
 
 

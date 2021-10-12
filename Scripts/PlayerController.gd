@@ -53,19 +53,18 @@ func _physics_process(delta):
 
 
 func _unhandled_input(event):
+	# when not currently using a workstation
 	if !Globals.activeWorkstation:
+		# move camera with mouse
 		if event is InputEventMouseMotion && Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 			rotate_y(-event.relative.x * mouseSensitivity)
 			$CameraPivot.rotate_x(-event.relative.y * mouseSensitivity)
 			$CameraPivot.rotation.x = clamp($CameraPivot.rotation.x, -1.2, 1.2)
 			
+		# debug method to spawn a vallum ingot
 		if event.is_action_pressed("debug_addIngot"):
-			var newForgingMat: ForgingMaterial = Globals.forgingMaterialTemplate.new()
-			newForgingMat.initForgingMaterial(Globals.vallumTemplate.new())
-			var newIngotData: IngotData = Globals.ingotDataTemplate.new()
-			newIngotData.forgingMat = newForgingMat
-			var newIngot: Ingot = Globals.ingotTemplate.instance()
-			newIngot.setIngotData(newIngotData)
+			var newForgingMat: ForgingMaterial = Globals.createForgingMaterial(Globals.vallumTemplate.new())
+			var newIngot: Ingot = Globals.createIngot(newForgingMat)
 			
 			workshopScene.freeItems.add_child(newIngot)
 			newIngot.global_transform.origin = playerCamera.global_transform.origin + playerCamera.global_transform.basis.z * -4
@@ -82,21 +81,17 @@ func _unhandled_input(event):
 		
 	# secondary action on workstations
 	if event.is_action_pressed("secondaryAction") && !Globals.activeWorkstation:
-		if Globals.isAnvilSelected():
-			if workshopScene.anvil.anvilSmithingGrid:
-				playerInventory.grabItem(workshopScene.anvil.anvilSmithingGrid)
-				workshopScene.anvil.anvilSmithingGrid = null
-			elif workshopScene.anvil.anvilPattern:
-				playerInventory.grabItem(workshopScene.anvil.anvilPattern)
-				workshopScene.anvil.anvilPattern = null
-			elif workshopScene.anvil.anvilIngot:
-				playerInventory.grabItem(workshopScene.anvil.anvilIngot)
-				workshopScene.anvil.anvilIngot = null
-			elif !workshopScene.anvil.anvilIngot && playerInventory.heldItem is Ingot:
-				workshopScene.anvil.anvilIngot = playerInventory.heldItem
-				workshopScene.anvil.anvilIngot.store(workshopScene.anvil.gridOrigin.get_global_transform())
-				playerInventory.heldItem = null
-				
+		if Globals.selectedWorkstation:
+			if playerInventory.heldItem: # swap item
+				Globals.selectedWorkstation.internalInventory.storeItem(playerInventory.heldItem)
+			else: # store items
+				if Globals.isAnvilSelected():
+					if workshopScene.anvil.anvilSmithingGrid:
+						workshopScene.anvil.internalInventory.retrieveItem(0)
+					elif workshopScene.anvil.anvilPattern:
+						workshopScene.anvil.internalInventory.retrieveItem(1)
+					elif workshopScene.anvil.anvilIngot:
+						workshopScene.anvil.internalInventory.retrieveItem(2)
 	
 	if event.is_action_pressed("secondaryAction") && interactRaycast.get_collider() \
 		&& interactRaycast.get_collider().is_in_group("Items"):
