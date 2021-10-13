@@ -49,6 +49,7 @@ func store(targetPos: Transform) -> void:
 	mode = RigidBody.MODE_STATIC
 	set_collision_layer_bit(5, false)
 	set_collision_layer_bit(6, true)
+	set_collision_mask_bit(5, false)
 	
 	targetTransform = targetPos
 	moveToTarget = true
@@ -60,6 +61,7 @@ func itemize() -> void:
 	mode = RigidBody.MODE_RIGID
 	set_collision_layer_bit(5, true)
 	set_collision_layer_bit(6, false)
+	set_collision_mask_bit(5, true)
 	
 	targetTransform = global_transform
 	var workshopScene = get_tree().get_root().get_node("WorkshopScene")

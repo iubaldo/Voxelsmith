@@ -28,7 +28,7 @@ func storeItem(item: Item) -> void:
 		item.store(slots[index].get_global_transform())
 	else:
 		print("inventory is full! swapping last item...")
-		swapItem(item, lastStoredIndex.pop_front())
+		swapItem(item, lastStoredIndex.front())
 	return
 
 
@@ -42,7 +42,9 @@ func retrieveItem(index: int) -> void:
 		return
 	
 	print("retrieving item from index " + var2str(lastStoredIndex.front()))
-	emit_signal("retrievedItem", inventory[lastStoredIndex.pop_front()])
+	emit_signal("retrievedItem", inventory[lastStoredIndex.front()])
+	inventory[lastStoredIndex.front()] = null
+	lastStoredIndex.pop_front()
 	return
 
 
