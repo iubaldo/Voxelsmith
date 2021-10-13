@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "WorkstationData",
+"class": "AnvilData",
+"language": "GDScript",
+"path": "res://Scripts/Interactable/Workstations/WorkstationData/AnvilData.gd"
+}, {
 "base": "Inventory",
 "class": "AnvilInventory",
 "language": "GDScript",
@@ -122,12 +127,12 @@ _global_script_classes=[ {
 "base": "Workstation",
 "class": "WorkshopAnvil",
 "language": "GDScript",
-"path": "res://Scripts/Interactable/WorkshopAnvil.gd"
+"path": "res://Scripts/Interactable/Workstations/WorkshopAnvil.gd"
 }, {
 "base": "Workstation",
 "class": "WorkshopForge",
 "language": "GDScript",
-"path": "res://Scripts/Interactable/WorkshopForge.gd"
+"path": "res://Scripts/Interactable/Workstations/WorkshopForge.gd"
 }, {
 "base": "Spatial",
 "class": "WorkshopScene",
@@ -137,9 +142,15 @@ _global_script_classes=[ {
 "base": "Interactable",
 "class": "Workstation",
 "language": "GDScript",
-"path": "res://Scripts/Interactable/Workstation.gd"
+"path": "res://Scripts/Interactable/Workstations/Workstation.gd"
+}, {
+"base": "Resource",
+"class": "WorkstationData",
+"language": "GDScript",
+"path": "res://Scripts/Interactable/Workstations/WorkstationData/WorkstationData.gd"
 } ]
 _global_script_class_icons={
+"AnvilData": "",
 "AnvilInventory": "",
 "BladeSwordComponent": "",
 "Component": "",
@@ -165,7 +176,8 @@ _global_script_class_icons={
 "WorkshopAnvil": "",
 "WorkshopForge": "",
 "WorkshopScene": "",
-"Workstation": ""
+"Workstation": "",
+"WorkstationData": ""
 }
 
 [application]

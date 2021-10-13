@@ -7,7 +7,7 @@ onready var itemHolder: Spatial = $ItemHolder
 var playerInventory = [] # currently unused, but would be used to store a larger inventory of items
 var heldItem: Item = null # should always be the first inventory slot once that's implemented
 var checkDist: bool = true
-var maxDistFromPlayer: float = 2.5
+var maxDistFromPlayer: float = 5
 
 
 func _ready():
@@ -19,7 +19,6 @@ func connectInventorySignals(inventory: Inventory) -> void:
 	# storing as a throwaway var stops Godot from throwing warnings
 	var _placeholder = inventory.connect("storedItem", self, "dropHeldItem") 
 	var _placeholder2 = inventory.connect("retrievedItem", self, "grabItem")
-	var _placeholder3 = inventory.connect("toggledCheckDist", self, "toggleCheckDist")
 	return
 
 
@@ -68,8 +67,4 @@ func dropHeldItem(itemize: bool) -> void:
 		heldItem.axis_lock_angular_y = false
 		heldItem.axis_lock_angular_z = false
 	heldItem = null
-	return
-
-func toggleCheckDist() -> void:
-	checkDist = !checkDist
 	return

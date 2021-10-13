@@ -5,11 +5,10 @@ class_name Inventory
 var allowedItemTypes = [] # stores itemType enums as ints to compare
 var inventory = [] # stores items
 var slots = [] # stores spatials that represent the physical locations of items in inventory
-var lastStoredIndex: int = 0
+var lastStoredIndex = []
 
 signal storedItem(itemize) # calls dropHeldItem() on playerInventory before we store it
 signal retrievedItem(item) # calls grabItem(item) on playerInventory
-signal toggledCheckDist() # toggles checkDist on playerInventory so we don't prematurely drop an item while moving it
 
 
 # if slots are full, swaps out the last item instead
@@ -24,12 +23,12 @@ func storeItem(item: Item) -> void:
 		print("storing item")
 		var index = inventory.find(null)
 		inventory[index] = item
-		lastStoredIndex = index
+		lastStoredIndex.push_front(index)
 		emit_signal("storedItem", false)
 		item.store(slots[index].get_global_transform())
 	else:
 		print("inventory is full! swapping last item...")
-		swapItem(item, lastStoredIndex)
+		swapItem(item, lastStoredIndex.pop_front())
 	return
 
 
@@ -42,9 +41,8 @@ func retrieveItem(index: int) -> void:
 		print("retrieveItem() - inventory is empty!")
 		return
 	
-	print("retrieving item from index " + var2str(lastStoredIndex))
-	emit_signal("retrievedItem", inventory[lastStoredIndex])
-	inventory[lastStoredIndex] = null
+	print("retrieving item from index " + var2str(lastStoredIndex.front()))
+	emit_signal("retrievedItem", inventory[lastStoredIndex.pop_front()])
 	return
 
 

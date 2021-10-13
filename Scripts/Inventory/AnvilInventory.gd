@@ -10,6 +10,7 @@ class_name AnvilInventory
 func _init():
 	inventory.resize(3)
 	slots.resize(3)
+	lastStoredIndex.resize(3)
 	allowedItemTypes = [ItemData.itemTypes.smithingGrid, ItemData.itemTypes.pattern, ItemData.itemTypes.ingot]
 	return
 
@@ -22,6 +23,9 @@ func storeItem(item: Item) -> void:
 	if !allowedItemTypes.has(item.itemData.itemType):
 		print("storeItem() - " + var2str(item.itemData.itemTypes) + " is a non-whitelisted itemType!")
 		return
+	if inventory[0] && (item.itemData.itemType == ItemData.itemTypes.pattern || item.itemData.itemType == ItemData.itemTypes.ingot):
+		print("storeItem() - can't store an ingot or pattern while a smithingGrid is stored!")
+		return
 	
 	match (item.itemData.itemType):
 		ItemData.itemTypes.smithingGrid:
@@ -29,7 +33,7 @@ func storeItem(item: Item) -> void:
 				inventory[0] = item
 				emit_signal("storedItem", false)
 				item.store(slots[0].get_global_transform())
-				lastStoredIndex = 0
+				lastStoredIndex.push_front(0)
 				print("storing smithingGrid")
 			else:
 				swapItem(item, 0)
@@ -38,7 +42,7 @@ func storeItem(item: Item) -> void:
 				inventory[1] = item
 				emit_signal("storedItem", false)
 				item.store(slots[1].get_global_transform())
-				lastStoredIndex = 1
+				lastStoredIndex.push_front(1)
 				print("storing pattern")
 			else:
 				swapItem(item, 1)
@@ -47,7 +51,7 @@ func storeItem(item: Item) -> void:
 				inventory[2] = item
 				emit_signal("storedItem", false)
 				item.store(slots[2].get_global_transform())
-				lastStoredIndex = 2
+				lastStoredIndex.push_front(2)
 				print("storing ingot")
 			else: 
 				swapItem(item, 2)
