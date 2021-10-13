@@ -16,7 +16,7 @@ func _init():
 
 # override
 func storeItem(item: Item) -> void:
-	if inventory.empty():
+	if !inventory.has(null):
 		print("storeItem() - inventory is full!")
 		return
 	if !allowedItemTypes.has(item.itemData.itemType):
@@ -27,22 +27,28 @@ func storeItem(item: Item) -> void:
 		ItemData.itemTypes.smithingGrid:
 			if !inventory[0]: 
 				inventory[0] = item
-				emit_signal("storedItem")
+				emit_signal("storedItem", false)
 				item.store(slots[0].get_global_transform())
+				lastStoredIndex = 0
+				print("storing smithingGrid")
 			else:
 				swapItem(item, 0)
 		ItemData.itemTypes.pattern:
 			if !inventory[1]:
 				inventory[1] = item
-				emit_signal("storedItem")
+				emit_signal("storedItem", false)
 				item.store(slots[1].get_global_transform())
+				lastStoredIndex = 1
+				print("storing pattern")
 			else:
 				swapItem(item, 1)
 		ItemData.itemTypes.ingot:
 			if !inventory[2]:
 				inventory[2] = item
-				emit_signal("storedItem")
+				emit_signal("storedItem", false)
 				item.store(slots[2].get_global_transform())
+				lastStoredIndex = 2
+				print("storing ingot")
 			else: 
 				swapItem(item, 2)
 	return

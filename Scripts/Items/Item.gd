@@ -30,7 +30,9 @@ func _physics_process(delta):
 		return
 	
 	if moveToTarget:
-		global_transform = global_transform.interpolate_with(targetTransform, 0.15)
+		var oldScale = scale
+		global_transform = global_transform.interpolate_with(targetTransform, 0.1)
+		scale = oldScale
 	if global_transform.origin.distance_to(targetTransform.origin) < 0.001:
 		moveToTarget = false
 		
@@ -43,8 +45,6 @@ func _physics_process(delta):
 # stores the item into an inventory
 # converts to static, changes collider layer, and lerps to target location
 # ideally use a "time" value to determine how long it takes to lerp to target
-
-# NOTE: use a position + rotation instead of full transform to avoid scale changing
 func store(targetPos: Transform) -> void:
 	mode = RigidBody.MODE_STATIC
 	set_collision_layer_bit(5, false)

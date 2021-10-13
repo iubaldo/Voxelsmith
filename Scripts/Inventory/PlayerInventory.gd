@@ -6,6 +6,7 @@ onready var itemHolder: Spatial = $ItemHolder
 # store the inventory in a resource later
 var playerInventory = [] # currently unused, but would be used to store a larger inventory of items
 var heldItem: Item = null # should always be the first inventory slot once that's implemented
+var checkDist: bool = true
 var maxDistFromPlayer: float = 2.5
 
 
@@ -18,6 +19,7 @@ func connectInventorySignals(inventory: Inventory) -> void:
 	# storing as a throwaway var stops Godot from throwing warnings
 	var _placeholder = inventory.connect("storedItem", self, "dropHeldItem") 
 	var _placeholder2 = inventory.connect("retrievedItem", self, "grabItem")
+	var _placeholder3 = inventory.connect("toggledCheckDist", self, "toggleCheckDist")
 	return
 
 
@@ -29,34 +31,45 @@ func _physics_process(delta):
 		heldItem.set_linear_velocity((a - b) * 10)
 	
 	# drops the heldItem if it goes too far away from the player
-	if heldItem&& itemHolder.get_global_transform().origin.distance_to(heldItem.get_global_transform().origin) \
+	if heldItem && itemHolder.get_global_transform().origin.distance_to(heldItem.get_global_transform().origin) \
 		> maxDistFromPlayer:
 		print("heldItem is too far from player, dropping!")
-		dropHeldItem()
+		dropHeldItem(true)
 	return
 
 
 # heldItem functions
 func grabItem(item: Item) -> void:
 	if heldItem != null:
-		dropHeldItem()
+		dropHeldItem(true)
 	
+	print("grabbing item")
+	checkDist = false
 	item.store(itemHolder.transform)
 	item.itemize()
 	item.axis_lock_angular_x = true
+	item.axis_lock_angular_y = true
 	item.axis_lock_angular_z = true
 	heldItem = item
+	checkDist = true
 	return
 
 
-func dropHeldItem() -> void:
+func dropHeldItem(itemize: bool) -> void:
 	if heldItem == null:
 		print("dropHeldItem() - heldItem is null!")
 		return
 	
-	heldItem.itemize()
-	heldItem.apply_central_impulse(Vector3.ZERO) # stops the item from sleeping
-	heldItem.axis_lock_angular_x = false
-	heldItem.axis_lock_angular_z = false
+	print("dropping held item")
+	if itemize:
+		heldItem.itemize()
+		heldItem.apply_central_impulse(Vector3.ZERO) # wakes the item from sleeping
+		heldItem.axis_lock_angular_x = false
+		heldItem.axis_lock_angular_y = false
+		heldItem.axis_lock_angular_z = false
 	heldItem = null
+	return
+
+func toggleCheckDist() -> void:
+	checkDist = !checkDist
 	return

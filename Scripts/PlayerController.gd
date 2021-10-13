@@ -80,24 +80,24 @@ func _unhandled_input(event):
 		playerCamera.current = true
 		
 	# secondary action on workstations
-	if event.is_action_pressed("secondaryAction") && !Globals.activeWorkstation:
-		if Globals.selectedWorkstation:
-			if playerInventory.heldItem: # swap item
-				Globals.selectedWorkstation.internalInventory.storeItem(playerInventory.heldItem)
-			else: # store items
-				if Globals.isAnvilSelected():
-					if workshopScene.anvil.anvilSmithingGrid:
-						workshopScene.anvil.internalInventory.retrieveItem(0)
-					elif workshopScene.anvil.anvilPattern:
-						workshopScene.anvil.internalInventory.retrieveItem(1)
-					elif workshopScene.anvil.anvilIngot:
-						workshopScene.anvil.internalInventory.retrieveItem(2)
-	
-	if event.is_action_pressed("secondaryAction") && interactRaycast.get_collider() \
+	if event.is_action_pressed("secondaryAction") && !Globals.activeWorkstation && Globals.selectedWorkstation:
+		if playerInventory.heldItem: # store item
+			Globals.selectedWorkstation.internalInventory.storeItem(playerInventory.heldItem)
+		else: # retrieve items
+			if Globals.isAnvilSelected():
+				if workshopScene.anvil.anvilSmithingGrid:
+					workshopScene.anvil.internalInventory.retrieveItem(0)
+				elif workshopScene.anvil.anvilPattern:
+					workshopScene.anvil.internalInventory.retrieveItem(1)
+				elif workshopScene.anvil.anvilIngot:
+					workshopScene.anvil.internalInventory.retrieveItem(2)
+			else:			
+				Globals.selectedWorkstation.internalInventory.retrieveItem(Globals.selectedWorkstation.internalInventory.lastStoredIndex)
+	elif event.is_action_pressed("secondaryAction") && interactRaycast.get_collider() \
 		&& interactRaycast.get_collider().is_in_group("Items"):
 		playerInventory.grabItem(interactRaycast.get_collider())
-	if event.is_action_pressed("dropItem") && playerInventory.heldItem:
-		playerInventory.dropHeldItem()
+	elif event.is_action_pressed("dropItem") && playerInventory.heldItem:
+		playerInventory.dropHeldItem(true)
 	return
 
 
