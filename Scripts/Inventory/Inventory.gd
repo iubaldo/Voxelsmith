@@ -3,7 +3,7 @@ class_name Inventory
 # stores items and their physical locations, as well as handles their insertion/retrieval
 
 var allowedItemTypes = [] # stores itemType enums as ints to compare
-var inventory = [] # stores items
+var items = [] # stores items
 var slots = [] # stores spatials that represent the physical locations of items in inventory
 var lastStoredIndex = []
 
@@ -19,10 +19,10 @@ func storeItem(item: Item) -> void:
 		print("storeItem() - " + var2str(item.itemData.itemTypes) + " is a non-whitelisted itemType!")
 		return
 	
-	if inventory.has(null): # if an unfilled slot exists
+	if items.has(null): # if an unfilled slot exists
 		print("storing item")
-		var index = inventory.find(null)
-		inventory[index] = item
+		var index = items.find(null)
+		items[index] = item
 		lastStoredIndex.push_front(index)
 		emit_signal("storedItem", false)
 		item.store(slots[index].get_global_transform())
@@ -34,16 +34,16 @@ func storeItem(item: Item) -> void:
 
 # deletes item from inventory and calls grabItem() from playerInventory
 func retrieveItem(index: int) -> void:
-	if inventory[index] == null:
+	if items[index] == null:
 		print("retrieveItem() - item at index is null!")
 		return
-	if inventory.empty():
+	if items.empty():
 		print("retrieveItem() - inventory is empty!")
 		return
 	
 	print("retrieving item from index " + var2str(lastStoredIndex.front()))
-	emit_signal("retrievedItem", inventory[lastStoredIndex.front()])
-	inventory[lastStoredIndex.front()] = null
+	emit_signal("retrievedItem", items[lastStoredIndex.front()])
+	items[lastStoredIndex.front()] = null
 	lastStoredIndex.pop_front()
 	return
 
@@ -53,8 +53,8 @@ func retrieveItem(index: int) -> void:
 func swapItem(swapItem: Item, index: int) -> void:
 	print("swapping items")
 	emit_signal("storedItem", false)
-	var retrievedItem: Item = inventory[index]
-	inventory[index] = swapItem
+	var retrievedItem: Item = items[index]
+	items[index] = swapItem
 	swapItem.store(slots[index].get_global_transform())
 	emit_signal("retrievedItem", retrievedItem)
 	return

@@ -1,16 +1,37 @@
-extends Node
+extends WorkstationData
+class_name ForgeData
 
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
+var maxHeat: float
+var heat: float
+var targetHeat: float
+var heatAccumulation: float # range(1, 10), determines how quickly the forge reaches its target heat
+var heatDissipation: float # range(1, 10), determines how quickly the forge loses heat
 
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
+func rankUp() -> void:
+	upgradeLevel += 1
+	# increase stats
+	return
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func accumulateHeat(delta: float) -> void:
+	if heat == 0: # prevents division by zero
+		heat = 1
+		return
+	
+	heat *= 1 + ((heatAccumulation / 50.0) * (targetHeat / heat) * delta)
+	if heat > maxHeat:
+		heat = maxHeat
+	return
+
+
+func dissipateHeat(delta: float) -> void:
+	heat *= 1 - ((((11 - heatDissipation) / 100.0) * (heat / maxHeat)) * delta)
+	if heat < 0:
+		heat = 0
+	
+	targetHeat *= 1 - ((((11 - heatDissipation) / 100.0)) * ((heat / maxHeat) if targetHeat < heat else 1.0) * delta)
+	if targetHeat < 0:
+		targetHeat = 0
+	return

@@ -6,7 +6,9 @@ extends KinematicBody
 onready var playerCamera = $CameraPivot/Camera
 onready var playerInventory = $CameraPivot/PlayerInventory
 onready var interactRaycast = $CameraPivot/Camera/InteractRayCast
-onready var playerCrosshair = $CameraPivot/Camera/CenterContainer/Crosshair
+onready var playerCrosshair = $CameraPivot/Camera/PlayerUI/CrosshairContainer/Crosshair
+onready var contextLabels = $CameraPivot/Camera/PlayerUI/ContextLabelContainer
+onready var debugHeatLabel = $CameraPivot/Camera/PlayerUI/ContextLabelContainer/DebugHeatLabel
 onready var grabTimer = $GrabTimer
 
 var workshopScene: WorkshopScene
@@ -25,20 +27,33 @@ func _ready():
 
 
 func _process(delta):
-	if Globals.activeWorkstation == null:
+	if !Globals.activeWorkstation:
 		if interactRaycast.is_colliding():
 			if interactRaycast.get_collider().is_in_group("Items") || interactRaycast.get_collider().is_in_group("Interactable"):
 				playerCrosshair.visible = true
+				contextLabels.visible = true
+				if interactRaycast.get_collider().is_in_group("Heatable"): # debug only, remove later
+					debugHeatLabel.visible = true
+					debugHeatLabel.text = "Heat: " + var2str(stepify(interactRaycast.get_collider().itemData.forgingMat.heat, 0.01))
 			
 			if Globals.selectedWorkstation != null && interactRaycast.get_collider() != Globals.selectedWorkstation:
 				Globals.selectedWorkstation = null
 			Globals.selectedWorkstation = interactRaycast.get_collider()
 		else:
 			playerCrosshair.visible = false
+			contextLabels.visible = false
+			debugHeatLabel.visible = false
 			if Globals.selectedWorkstation != null:
 				Globals.selectedWorkstation = null
+		
+		if Globals.isForgeSelected():
+			contextLabels.visible = true
+			debugHeatLabel.visible = true
+			debugHeatLabel.text = "Forge Heat: " + var2str(stepify(Globals.selectedWorkstation.workstationData.heat, 0.01)) + \
+									"\nTarget Heat: " + var2str(stepify(Globals.selectedWorkstation.workstationData.targetHeat, 0.01))
 	else:
 		playerCrosshair.visible = false
+		
 	return
 
 
@@ -79,22 +94,26 @@ func _unhandled_input(event):
 		Globals.activeWorkstation.onDeactive()
 		Globals.activeWorkstation = null
 		playerCamera.current = true
+	
+	if event.is_action_pressed("debug_blowBellows") && Globals.isForgeSelected():
+		print("blowing bellows")
+		Globals.selectedWorkstation.blowBellows()
 		
 	# secondary action on workstations
 	if event.is_action_pressed("secondaryAction") && !Globals.activeWorkstation && Globals.selectedWorkstation:
 		if playerInventory.heldItem: # store item
-			Globals.selectedWorkstation.internalInventory.storeItem(playerInventory.heldItem)
+			Globals.selectedWorkstation.workstationData.inventory.storeItem(playerInventory.heldItem)
 		else: # retrieve items
-			if Globals.selectedWorkstation.internalInventory.lastStoredIndex.front() != null:
+			if Globals.selectedWorkstation.workstationData.inventory.lastStoredIndex.front() != null:
 				if Globals.isAnvilSelected():
-					if workshopScene.anvil.anvilSmithingGrid:
-						workshopScene.anvil.internalInventory.retrieveItem(0)
-					elif workshopScene.anvil.anvilPattern:
-						workshopScene.anvil.internalInventory.retrieveItem(1)
-					elif workshopScene.anvil.anvilIngot:
-						workshopScene.anvil.internalInventory.retrieveItem(2)
+					if workshopScene.anvil.workstationData.inventory.items[0]:
+						workshopScene.anvil.workstationData.inventory.retrieveItem(0)
+					elif workshopScene.anvil.workstationData.inventory.items[1]:
+						workshopScene.anvil.workstationData.inventory.retrieveItem(1)
+					elif workshopScene.anvil.workstationData.inventory.items[2]:
+						workshopScene.anvil.workstationData.inventory.retrieveItem(2)
 				else:			
-					Globals.selectedWorkstation.internalInventory.retrieveItem(Globals.selectedWorkstation.internalInventory.lastStoredIndex[0])
+					Globals.selectedWorkstation.workstationData.inventory.retrieveItem(Globals.selectedWorkstation.workstationData.inventory.lastStoredIndex[0])
 			else:
 				print("inventory is empty!")
 	elif event.is_action_pressed("secondaryAction") && interactRaycast.get_collider() \

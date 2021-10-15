@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Materials/Voxel/VoxelOutlineMat.tres" type="Material" id=1]
 [ext_resource path="res://Materials/Voxel/VoxelMat.tres" type="Material" id=2]
 [ext_resource path="res://Scripts/Subvoxel.gd" type="Script" id=3]
+[ext_resource path="res://Materials/DefaultIngotMat.tres" type="Material" id=4]
 
 [sub_resource type="CubeMesh" id=1]
 resource_local_to_scene = true
@@ -20,7 +21,7 @@ script = ExtResource( 3 )
 
 [node name="SubvoxelMesh" type="MeshInstance" parent="."]
 mesh = SubResource( 1 )
-material/0 = null
+material/0 = ExtResource( 4 )
 
 [node name="SubvoxelHitbox" type="Area" parent="SubvoxelMesh"]
 collision_layer = 16

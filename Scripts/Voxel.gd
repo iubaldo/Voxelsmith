@@ -142,6 +142,15 @@ func toggleVoxelCollider() -> void:
 	return
 
 
+func setSubvoxelColor() -> void:
+	for x in 5:
+		for y in 5:
+			for z in 5:
+				if subvoxelMatrix[x][y][z]:
+					subvoxelMatrix[x][y][z].mat.albedo_color = subvoxelColor
+	return
+
+
 # note: these should only call if subvoxelMode = false and anvil is active
 func _on_VoxelHitbox_mouse_entered():
 	if !Globals.subvoxelMode && Globals.isAnvilActive():

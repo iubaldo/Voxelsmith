@@ -17,6 +17,7 @@ const STEP_SIZE: float = 0.1 # constant for converting voxel's worldspace coords
 func _ready():
 	collider = $CollisionShape
 	add_to_group("Items")
+	add_to_group("Heatable")
 	return
 
 
@@ -24,7 +25,7 @@ func createItemData(newForgingMat: ForgingMaterial, newPatternData: PatternData)
 	var newSGData: SGData = Globals.sgDataTemplate.new()
 	newSGData.forgingMat = newForgingMat
 	newSGData.patternData = newPatternData
-	newSGData.component = newSGData.patternData.component
+	newSGData.componentType = newSGData.patternData.componentType
 	setItemData(newSGData)
 	initSmithingGrid()
 	return
@@ -47,6 +48,9 @@ func _physics_process(delta):
 		centerVoxelOutline.visible = false
 	else:
 		centerVoxelOutline.visible = true
+	
+	itemData.setSubvoxelColor(itemData.forgingMat.getMaterialColor())
+	itemData.forgingMat.dissipateHeat(delta)
 	return
 
 

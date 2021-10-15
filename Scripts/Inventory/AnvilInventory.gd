@@ -8,7 +8,7 @@ class_name AnvilInventory
 #	2: ingot
 
 func _init():
-	inventory.resize(3)
+	items.resize(3)
 	slots.resize(3)
 	lastStoredIndex.resize(3)
 	allowedItemTypes = [ItemData.itemTypes.smithingGrid, ItemData.itemTypes.pattern, ItemData.itemTypes.ingot]
@@ -17,40 +17,46 @@ func _init():
 
 # override
 func storeItem(item: Item) -> void:
-	if !inventory.has(null):
+	if !items.has(null):
 		print("storeItem() - inventory is full!")
 		return
 	if !allowedItemTypes.has(item.itemData.itemType):
 		print("storeItem() - " + var2str(item.itemData.itemTypes) + " is a non-whitelisted itemType!")
 		return
-	if inventory[0] && (item.itemData.itemType == ItemData.itemTypes.pattern || item.itemData.itemType == ItemData.itemTypes.ingot):
+	if items[0] && (item.itemData.itemType == ItemData.itemTypes.pattern || item.itemData.itemType == ItemData.itemTypes.ingot):
 		print("storeItem() - can't store an ingot or pattern while a smithingGrid is stored!")
 		return
 	
 	match (item.itemData.itemType):
 		ItemData.itemTypes.smithingGrid:
-			if !inventory[0]: 
-				inventory[0] = item
+			if !items[0]: 
+				items[0] = item
 				emit_signal("storedItem", false)
 				item.store(slots[0].get_global_transform())
+				item.get_parent().remove_child(item)
+				slots[0].add_child(item)
 				lastStoredIndex.push_front(0)
 				print("storing smithingGrid")
 			else:
 				swapItem(item, 0)
 		ItemData.itemTypes.pattern:
-			if !inventory[1]:
-				inventory[1] = item
+			if !items[1]:
+				items[1] = item
 				emit_signal("storedItem", false)
 				item.store(slots[1].get_global_transform())
+				item.get_parent().remove_child(item)
+				slots[1].add_child(item)
 				lastStoredIndex.push_front(1)
 				print("storing pattern")
 			else:
 				swapItem(item, 1)
 		ItemData.itemTypes.ingot:
-			if !inventory[2]:
-				inventory[2] = item
+			if !items[2]:
+				items[2] = item
 				emit_signal("storedItem", false)
 				item.store(slots[2].get_global_transform())
+				item.get_parent().remove_child(item)
+				slots[2].add_child(item)
 				lastStoredIndex.push_front(2)
 				print("storing ingot")
 			else: 

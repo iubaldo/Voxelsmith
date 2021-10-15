@@ -9,7 +9,8 @@ var matName: String
 var matColor: Color # the material's color, depends on current heat level and tempering state
 
 # these attributes can change during smithing
-var heat: int = 0 # the material's current heat
+var heat: float = 0 # the material's current heat
+const maxHeat: int = 10000 # the maximum possible heat
 var timesReheated: int = 0 # how many times the material has been reheated in a forge during smithing (heat treatment does not apply)
 var maxReheats: int = 5 # how many times the material may be reheated until quality starts dropping
 var quality: int = 100 # the overall quality of smithing
@@ -24,6 +25,32 @@ func initForgingMaterial(newMat: MaterialType) -> void:
 	hardness = matType.hardness
 	toughness = matType.toughness
 	return
+
+
+func getMaterialColor() -> Color:
+	var scaledHeat = heat / matType.smeltingTemp
+	if matType.canTemper:
+		return matType.temperGradient.interpolate(scaledHeat)
+	else:
+		return matType.colorGradient.interpolate(scaledHeat)
+
+
+func accumulateHeat(targetHeat: int, delta: float) -> void:
+	if heat == 0: # prevents division by zero
+		heat = 1
+		return
+	
+	heat *= 1 + ((matType.heatResistance / 100.0) * (targetHeat / heat) * delta)
+	if heat > maxHeat:
+		heat = maxHeat
+	return
+
+func dissipateHeat(delta: float) -> void:
+	heat *= 1 - ((((11 - matType.heatResistance) / 100) * (heat / maxHeat)) * delta)
+	if heat < 1:
+		heat = 0
+	return
+
 
 func canSmith() -> bool:
 	return heat >= matType.forgingTemp

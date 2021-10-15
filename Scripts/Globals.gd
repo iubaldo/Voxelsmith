@@ -26,6 +26,9 @@ onready var bladeSwordComponentTemplate = load("res://Scripts/Items/ItemData/Com
 onready var inventoryTemplate = load("res://Scripts/Inventory/Inventory.gd")
 onready var anvilInventoryTemplate = load("res://Scripts/Inventory/AnvilInventory.gd")
 onready var forgeInventoryTemplate = load("res://Scripts/Inventory/ForgeInventory.gd")
+onready var anvilDataTemplate = load("res://Scripts/Interactable/Workstations/WorkstationData/AnvilData.gd")
+onready var forgeDataTemplate = load("res://Scripts/Interactable/Workstations/WorkstationData/ForgeData.gd")
+
 
 var subvoxelMode: bool = false # whether or not to target subvoxels
 var selectedWorkstation: Workstation = null
@@ -89,7 +92,7 @@ func createIngot(forgingMat: ForgingMaterial) -> Ingot:
 	return newIngot
 
 func createPattern(componentType: ComponentType) -> Pattern:
-	var newPattern: Pattern = componentTemplate.instance()
+	var newPattern: Pattern = patternTemplate.instance()
 	newPattern.createItemData(componentType)
 	return newPattern
 

@@ -4,6 +4,7 @@ class_name Subvoxel
 
 onready var outlineMesh = $OutlineMesh
 onready var collider = $SubvoxelMesh/SubvoxelHitbox/CollisionShape
+onready var mat: SpatialMaterial = $SubvoxelMesh.get_surface_material(0)
 
 var smithingGrid: SmithingGrid # the subvoxel's parent smithingGrid, inherited from parent voxel
 var parentVoxel: Voxel

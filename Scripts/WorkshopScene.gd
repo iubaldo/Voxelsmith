@@ -9,8 +9,8 @@ onready var forge: WorkshopForge = $Environment/Workstations/WorkshopForge
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	player.playerInventory.connectInventorySignals(anvil.internalInventory)
-	player.playerInventory.connectInventorySignals(forge.internalInventory)
+	player.playerInventory.connectInventorySignals(anvil.workstationData.inventory)
+	player.playerInventory.connectInventorySignals(forge.workstationData.inventory)
 	return
 
 func _input(event):

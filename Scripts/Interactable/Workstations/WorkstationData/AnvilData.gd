@@ -13,3 +13,7 @@ func isValidMaterial(mat: ForgingMaterial) -> bool:
 	return false
 
 
+func rankUp() -> void:
+	upgradeLevel += 1
+	# increase stats
+	return

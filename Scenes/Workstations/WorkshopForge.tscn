@@ -47,7 +47,7 @@ shape = SubResource( 1 )
 visible = false
 
 [node name="Viewport" type="Viewport" parent="Label3D"]
-size = Vector2( 209, 47 )
+size = Vector2( 40, 47 )
 transparent_bg = true
 render_target_v_flip = true
 script = ExtResource( 4 )
@@ -56,7 +56,6 @@ script = ExtResource( 4 )
 margin_right = 40.0
 margin_bottom = 14.0
 custom_fonts/font = SubResource( 2 )
-text = "Use Forge [F]"
 align = 1
 valign = 1
 
@@ -84,13 +83,13 @@ shape = SubResource( 6 )
 [node name="InternalInventory" type="Spatial" parent="."]
 
 [node name="Slot0" type="Spatial" parent="InternalInventory"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.8, 0.9 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.75, 0.9 )
 
 [node name="Slot1" type="Spatial" parent="InternalInventory"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.8, 0.9 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.75, 0.9 )
 
 [node name="Slot2" type="Spatial" parent="InternalInventory"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.8, 0.348242 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.75, 0.348242 )
 
 [node name="Slot3" type="Spatial" parent="InternalInventory"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.8, 0.348242 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.75, 0.348242 )

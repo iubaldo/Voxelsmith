@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Scripts/PlayerController.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/Inventory/PlayerInventory.gd" type="Script" id=2]
-[ext_resource path="res://Sprites/white_circle.png" type="Texture" id=3]
+[ext_resource path="res://Scenes/UI/PlayerUI.tscn" type="PackedScene" id=3]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 0.5
@@ -31,31 +31,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.25 )
 current = true
 
-[node name="CenterContainer" type="CenterContainer" parent="CameraPivot/Camera"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Crosshair" type="Control" parent="CameraPivot/Camera/CenterContainer"]
-margin_left = 512.0
-margin_top = 300.0
-margin_right = 512.0
-margin_bottom = 300.0
-
-[node name="TextureRect" type="TextureRect" parent="CameraPivot/Camera/CenterContainer/Crosshair"]
-rect_scale = Vector2( 0.002, 0.002 )
-mouse_filter = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-texture = ExtResource( 3 )
-expand = true
-stretch_mode = 4
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="PlayerUI" parent="CameraPivot/Camera" instance=ExtResource( 3 )]
 
 [node name="InteractRayCast" type="RayCast" parent="CameraPivot/Camera"]
 enabled = true
