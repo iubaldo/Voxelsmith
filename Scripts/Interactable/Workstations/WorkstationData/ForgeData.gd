@@ -20,18 +20,19 @@ func accumulateHeat(delta: float) -> void:
 		heat = 1
 		return
 	
-	heat *= 1 + ((heatAccumulation / 50.0) * (targetHeat / heat) * delta)
+	heat *= 1 + (float(heatAccumulation / 50.0) * (targetHeat / heat) * delta)
 	if heat > maxHeat:
 		heat = maxHeat
 	return
 
 
 func dissipateHeat(delta: float) -> void:
+	heat *= 1 - (((float(11 - heatDissipation) / 100.0)) * (heat / maxHeat) * delta)
 	if heat < 0:
 		heat = 0
 		return
 	
-	targetHeat *= 1 - ((((11 - heatDissipation) / 100.0)) * ((heat / maxHeat) if targetHeat < heat else 1.0) * delta)
+	targetHeat *= 1 - (((float(11 - heatDissipation) / 100.0)) * ((heat / maxHeat) if targetHeat < heat else 1.0) * delta)
 	if targetHeat < 0:
 		targetHeat = 0
 	return
