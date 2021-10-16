@@ -20,3 +20,12 @@ material/0 = ExtResource( 3 )
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05, 0.1, 0.05 )
 shape = SubResource( 1 )
+
+[node name="MeltTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="VisibilityNotifier" type="VisibilityNotifier" parent="."]
+
+[connection signal="timeout" from="MeltTimer" to="." method="_on_MeltTimer_timeout"]
+[connection signal="screen_exited" from="VisibilityNotifier" to="." method="_on_VisibilityNotifier_screen_exited"]

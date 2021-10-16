@@ -44,11 +44,12 @@ func accumulateHeat(targetHeat: int, delta: float) -> void:
 	if heat > maxHeat:
 		heat = maxHeat
 	return
-
 func dissipateHeat(delta: float) -> void:
-	heat *= 1 - ((((11 - matType.heatResistance) / 100) * (heat / maxHeat)) * delta)
 	if heat < 1:
 		heat = 0
+		return
+		
+	heat *= 1 - (((float(11 - matType.heatResistance) / 100) * (heat / maxHeat)) * delta)
 	return
 
 

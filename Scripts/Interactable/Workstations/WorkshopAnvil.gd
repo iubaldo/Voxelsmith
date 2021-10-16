@@ -9,7 +9,8 @@ onready var gridOrigin: Spatial = $InternalInventory/GridOrigin
 onready var patternOrigin: Spatial = $InternalInventory/PatternOrigin
 onready var ingotOrigin: Spatial = $InternalInventory/IngotOrigin
 onready var smithingUI: Control = $SmithingUI
-onready var powerLabel: Label = $SmithingUI/StrikePowerLabel
+onready var powerLabel: Label = $SmithingUI/MarginContainer/VBoxContainer/StrikePowerLabel
+onready var heatLabel: Label = $SmithingUI/MarginContainer/VBoxContainer/HeatLabel
 onready var strikeTimer: Timer = $StrikeTimer # determines how long before strike is cancelled
 onready var strikeCDTimer: Timer = $StrikeCDTimer # determines cooldown before another strike can be made
 
@@ -83,11 +84,9 @@ func _process(delta):
 	
 
 func _physics_process(delta):
-	if Globals.isAnvilActive() && workstationData.inventory.items[0] != null:
-		if strikePower != 0:
-			powerLabel.text = "Strike Power: " + var2str(strikePower)
-		else:
-			powerLabel.text = ""
+	if Globals.isAnvilActive() && workstationData.inventory.items[0]:
+		powerLabel.text = "Strike Power: " + var2str(strikePower)
+		heatLabel.text = "Heat: " + var2str(stepify(workstationData.inventory.items[0].itemData.forgingMat.heat, 0.01))
 			
 		if strikeCDTimer.is_stopped():
 			if Input.is_action_pressed("primaryAction"):
@@ -96,9 +95,9 @@ func _physics_process(delta):
 						# some kind of penalty for too light
 						pass
 					else:
-						if !Globals.subvoxelMode && Globals.selectedVoxel != null:
+						if !Globals.subvoxelMode && Globals.selectedVoxel:
 							strike(Globals.selectedVoxel, strikePower)
-						elif Globals.subvoxelMode && Globals.selectedSubvoxel != null:
+						elif Globals.subvoxelMode && Globals.selectedSubvoxel:
 							strike(Globals.selectedSubvoxel, strikePower)
 						strikePower = 0
 				else:
@@ -183,13 +182,20 @@ func onDeactive() -> void:
 
 
 func strike(target, power: int) -> void: # target is either voxel or subvoxel
-	if target != null:
+	if target:
 		if !anvilBounds.has_point(Vector2(stepify(target.translation.x + workstationData.inventory.items[0].translation.x - 0.25, 0.1), \
 			stepify(target.translation.z + workstationData.inventory.items[0].translation.z - 0.05, 0.1))): 
 			print(var2str(Vector2(stepify(target.translation.x + workstationData.inventory.items[0].translation.x - 0.25, 0.1), \
 			stepify(target.translation.z + workstationData.inventory.items[0].translation.z - 0.05, 0.1))))
 			print("strike() - target outside anvil grid!")
 			return
+		
+		workstationData.inventory.items[0].itemData.forgingMat.heat *= 1 - ((float(strikePower) / maxStrikePower) * 0.1)
+		
+		if !workstationData.inventory.items[0].canSmith():
+			print("strike() - heat is too low! \nHeat: " + var2str(workstationData.inventory.items[0].itemData.forgingMat.heat) + "\nForging Temp: " + var2str(workstationData.inventory.items[0].itemData.forgingMat.matType.forgingTemp))
+			return
+			
 		if target is Voxel:
 			var targetList = [] # list of positions to check
 			
@@ -275,18 +281,14 @@ func strike(target, power: int) -> void: # target is either voxel or subvoxel
 					
 			# print("targetPos: " + var2str(target.gridPosition))
 			
-			for targetPos in targetList:
-				if workstationData.inventory.items[0].doesVoxelExist(targetPos) && workstationData.inventory.items[0].getVoxel(targetPos) != null:
-					# apply heat loss
-					pass
-			pass
+			
 		elif target is Subvoxel:
 			if power <= 100:
 				# some kind of penalty for striking too lightly
 				pass
 			elif power <= 200:
 				target.parentVoxel.destroySubvoxel(target.gridPosition)
-			pass
+				
 		strikeCDTimer.start()
 	else:
 		print("strike() - target is null!")

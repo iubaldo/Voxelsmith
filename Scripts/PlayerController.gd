@@ -28,7 +28,7 @@ func _ready():
 
 func _process(delta):
 	if !Globals.activeWorkstation:
-		if interactRaycast.is_colliding():
+		if interactRaycast.is_colliding() && interactRaycast.get_collider():
 			if interactRaycast.get_collider().is_in_group("Items") || interactRaycast.get_collider().is_in_group("Interactable"):
 				playerCrosshair.visible = true
 				contextLabels.visible = true

@@ -3,8 +3,11 @@ class_name SmithingGrid
 # contains the physical voxels that make up a piece of worked metal
 # note: might have to replace Rect2 variables with AABB counterparts for smithing in 3d
 
+onready var meltTimer: Timer = $MeltTimer
 onready var centerVoxelOutline = $CenterVoxelOutline
 onready var collisionShape: CollisionShape = $CollisionShape
+
+var melt: bool = false
 
 # constants inherited from sgData
 var gridWidth: int
@@ -149,6 +152,10 @@ func getVoxelPosition(targetVoxel: Voxel): # returns Vector3
 	return null
 
 
+func canSmith() -> bool:
+	return itemData.forgingMat.heat >= itemData.forgingMat.matType.forgingTemp
+
+
 # used when creating new smithingGrids on the anvil
 func setCollisionShape() -> void:
 	if !itemData.component:
@@ -163,4 +170,19 @@ func setCollisionShape() -> void:
 		get_global_transform().origin += Vector3.UP * STEP_SIZE
 	
 	print(var2str(collisionShape.shape.extents))
+	return
+
+
+# causes the ingot to start falling through the ground slowly before it despawns once out of sight
+func _on_MeltTimer_timeout():
+	itemize()
+	collider.disabled = true
+	gravity_scale = 0.1
+	melt = true
+	return
+
+
+func _on_VisibilityNotifier_screen_exited():
+	if melt:
+		self.queue_free()
 	return

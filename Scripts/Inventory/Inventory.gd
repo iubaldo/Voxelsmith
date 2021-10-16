@@ -48,6 +48,14 @@ func retrieveItem(index: int) -> void:
 	return
 
 
+# acts identically to retrieveItem, but without grabbing the item
+func removeItem(item: Item) -> void:
+	var index = items.find(item)
+	items[index] = null
+	lastStoredIndex.remove(index)
+	return
+
+
 # swaps an item in the inventory with another item
 # replaces item at index with swapItem
 func swapItem(swapItem: Item, index: int) -> void:

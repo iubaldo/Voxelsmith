@@ -1,7 +1,5 @@
 extends Workstation
 class_name WorkshopForge
-# if interacted with, switch to this camera
-# forging code here
 
 onready var slot0Origin: Spatial = $InternalInventory/Slot0
 onready var slot1Origin: Spatial = $InternalInventory/Slot1
@@ -52,6 +50,18 @@ func _physics_process(delta):
 	for item in workstationData.inventory.items:
 		if item:
 			item.itemData.forgingMat.accumulateHeat(workstationData.targetHeat, delta)
+			
+			if item.itemData.forgingMat.heat > item.itemData.forgingMat.matType.smeltingTemp && item.meltTimer.time_left == 0:
+				print("start melt countdown")
+				item.meltTimer.start()
+		
+			# if we fall back below smelting temp, abort
+			if item.meltTimer.time_left > 0 && item.itemData.forgingMat.heat <= item.itemData.forgingMat.matType.smeltingTemp:
+				print("abort melt countdown")
+				item.meltTimer.stop()
+				
+			if item.melt:
+				workstationData.inventory.removeItem(item)
 	
 	if workstationData.targetHeat > workstationData.heat:
 		workstationData.accumulateHeat(delta)
