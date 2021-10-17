@@ -16,7 +16,7 @@ onready var strikeCDTimer: Timer = $StrikeCDTimer # determines cooldown before a
 
 
 const STEP_SIZE: float = 0.1 # constant for converting to a normalized coordinate system for voxels
-var gridBounds: Rect2 = Rect2(-14 * STEP_SIZE, -28 * STEP_SIZE, 29 * STEP_SIZE, 49 * STEP_SIZE)
+var gridBounds: Rect2 = Rect2(-8 * STEP_SIZE, -4 * STEP_SIZE, 15 * STEP_SIZE, 9 * STEP_SIZE)
 var anvilBounds: Rect2 = Rect2(-6 * STEP_SIZE, -2 * STEP_SIZE, 13 * STEP_SIZE, 5 * STEP_SIZE)
 var pritchelHole: Rect2 = Rect2(5 * STEP_SIZE, -1 * STEP_SIZE, 1 * STEP_SIZE, 3 * STEP_SIZE)
 
@@ -183,10 +183,11 @@ func onDeactive() -> void:
 
 func strike(target, power: int) -> void: # target is either voxel or subvoxel
 	if target:
-		if !anvilBounds.has_point(Vector2(stepify(target.translation.x + workstationData.inventory.items[0].translation.x - 0.25, 0.1), \
-			stepify(target.translation.z + workstationData.inventory.items[0].translation.z - 0.05, 0.1))): 
-			print(var2str(Vector2(stepify(target.translation.x + workstationData.inventory.items[0].translation.x - 0.25, 0.1), \
-			stepify(target.translation.z + workstationData.inventory.items[0].translation.z - 0.05, 0.1))))
+		if !anvilBounds.has_point(Vector2(stepify(target.translation.x + workstationData.inventory.items[0].translation.x, 0.1), \
+			stepify(target.translation.z + workstationData.inventory.items[0].translation.z, 0.1))): 
+			print(var2str(Vector2(stepify(target.translation.x + workstationData.inventory.items[0].translation.x, 0.1), \
+			stepify(target.translation.z + workstationData.inventory.items[0].translation.z, 0.1))))
+			
 			print("strike() - target outside anvil grid!")
 			return
 		
@@ -206,8 +207,8 @@ func strike(target, power: int) -> void: # target is either voxel or subvoxel
 				print("action: precise strike")
 				
 				# punch
-				if pritchelHole.has_point(Vector2(stepify(target.translation.x + workstationData.inventory.items[0].translation.x - 0.25, 0.1), \
-					stepify(target.translation.z + workstationData.inventory.items[0].translation.z - 0.05, 0.1))): 
+				if pritchelHole.has_point(Vector2(stepify(target.translation.x + workstationData.inventory.items[0].translation.x, 0.1), \
+					stepify(target.translation.z + workstationData.inventory.items[0].translation.z, 0.1))): 
 					print("action: punch")
 					workstationData.inventory.items[0].destroyVoxel(target.gridPosition)
 					return
