@@ -36,6 +36,7 @@ func storeItem(item: Item) -> void:
 				item.get_parent().remove_child(item)
 				slots[0].add_child(item)
 				lastStoredIndex.push_front(0)
+				var _placeholder = item.connect("melted", self, "removeItem")
 				print("storing smithingGrid")
 			else:
 				swapItem(item, 0)
@@ -58,6 +59,7 @@ func storeItem(item: Item) -> void:
 				item.get_parent().remove_child(item)
 				slots[2].add_child(item)
 				lastStoredIndex.push_front(2)
+				var _placeholder = item.connect("melted", self, "removeItem")
 				print("storing ingot")
 			else: 
 				swapItem(item, 2)

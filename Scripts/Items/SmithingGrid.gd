@@ -54,6 +54,15 @@ func _physics_process(delta):
 	
 	itemData.setSubvoxelColor(itemData.forgingMat.getMaterialColor())
 	itemData.forgingMat.dissipateHeat(delta)
+	
+	if itemData.forgingMat.heat > itemData.forgingMat.matType.smeltingTemp && meltTimer.time_left == 0:
+		print("start melt countdown")
+		meltTimer.start()
+
+	# if we fall back below smelting temp, abort
+	if meltTimer.time_left > 0 && itemData.forgingMat.heat <= itemData.forgingMat.matType.smeltingTemp:
+		print("abort melt countdown")
+		meltTimer.stop()
 	return
 
 
@@ -173,12 +182,36 @@ func setCollisionShape() -> void:
 	return
 
 
-# causes the ingot to start falling through the ground slowly before it despawns once out of sight
+#func meltVoxel() -> void:
+#	var searched = []
+#	for vox in itemData.gridMatrix:
+#		if vox:
+#			var numNeighbors = 0
+#			numNeighbors += 1 if doesVoxelExist(vox.gridPosition + Vector3.FORWARD) else 0
+#			numNeighbors += 1 if doesVoxelExist(vox.gridPosition + Vector3.BACK) else 0
+#			numNeighbors += 1 if doesVoxelExist(vox.gridPosition + Vector3.LEFT) else 0
+#			numNeighbors += 1 if doesVoxelExist(vox.gridPosition + Vector3.RIGHT) else 0
+#			var pair = [vox, numNeighbors]
+#			searched.push_back(pair)
+#	searched.sort_custom(neighborSort, "sortAscending")
+#	destroyVoxel(searched[0].gridPosition)
+#	return
+#
+#
+#class neighborSort:
+#	static func sortAscending(a, b):
+#		if a[1] < b[1]:
+#			return true
+#		return false
+
+
+# starts melting voxels one-by-one
 func _on_MeltTimer_timeout():
 	itemize()
 	collider.disabled = true
 	gravity_scale = 0.1
 	melt = true
+	emit_signal("melted", self)
 	return
 
 

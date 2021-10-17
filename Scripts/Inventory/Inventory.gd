@@ -26,6 +26,8 @@ func storeItem(item: Item) -> void:
 		lastStoredIndex.push_front(index)
 		emit_signal("storedItem", false)
 		item.store(slots[index].get_global_transform())
+		if item.is_in_group("Heatable"):
+			var _placeholder = item.connect("melted", self, "removeItem")
 	else:
 		print("inventory is full! swapping last item...")
 		swapItem(item, lastStoredIndex.front())
@@ -41,6 +43,9 @@ func retrieveItem(index: int) -> void:
 		print("retrieveItem() - inventory is empty!")
 		return
 	
+	if items[index].is_in_group("Heatable"):
+		items[index].disconnect("melted", self, "removeItem")
+			
 	print("retrieving item from index " + var2str(lastStoredIndex.front()))
 	emit_signal("retrievedItem", items[lastStoredIndex.front()])
 	items[lastStoredIndex.front()] = null
@@ -50,6 +55,12 @@ func retrieveItem(index: int) -> void:
 
 # acts identically to retrieveItem, but without grabbing the item
 func removeItem(item: Item) -> void:
+	if !items.has(item):
+		return
+	
+	if item.is_in_group("Heatable"):
+		item.disconnect("melted", self, "removeItem")
+	
 	var index = items.find(item)
 	items[index] = null
 	lastStoredIndex.remove(index)
@@ -62,6 +73,10 @@ func swapItem(swapItem: Item, index: int) -> void:
 	print("swapping items")
 	emit_signal("storedItem", false)
 	var retrievedItem: Item = items[index]
+	
+	if retrievedItem.is_in_group("Heatable"):
+		retrievedItem.disconnect("melted", self, "removeItem")
+	
 	items[index] = swapItem
 	swapItem.store(slots[index].get_global_transform())
 	emit_signal("retrievedItem", retrievedItem)

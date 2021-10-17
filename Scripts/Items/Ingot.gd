@@ -18,6 +18,15 @@ func _ready():
 func _physics_process(delta):
 	mat.albedo_color = itemData.forgingMat.getMaterialColor()
 	itemData.forgingMat.dissipateHeat(delta)
+	
+	if itemData.forgingMat.heat > itemData.forgingMat.matType.smeltingTemp && meltTimer.time_left == 0:
+		print("start melt countdown")
+		meltTimer.start()
+
+	# if we fall back below smelting temp, abort
+	if meltTimer.time_left > 0 && itemData.forgingMat.heat <= itemData.forgingMat.matType.smeltingTemp:
+		print("abort melt countdown")
+		meltTimer.stop()
 	return
 
 
@@ -34,6 +43,7 @@ func _on_MeltTimer_timeout():
 	collider.disabled = true
 	gravity_scale = 0.1
 	melt = true
+	emit_signal("melted", self)
 	return
 
 

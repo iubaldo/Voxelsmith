@@ -28,6 +28,9 @@ func _physics_process(delta):
 		var a = itemHolder.get_global_transform().origin
 		var b = heldItem.get_global_transform().origin
 		heldItem.set_linear_velocity((a - b) * 10)
+		
+		if heldItem.melt:
+			dropHeldItem(true)
 	
 	# drops the heldItem if it goes too far away from the player
 	if heldItem && itemHolder.get_global_transform().origin.distance_to(heldItem.get_global_transform().origin) \

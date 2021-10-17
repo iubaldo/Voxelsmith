@@ -10,6 +10,9 @@ var moveToTarget: bool = false
 var resetTransform: bool = false
 var lerpSpeed: float = 5.0
 
+# warning-ignore:unused_signal
+signal melted(item) # used when a heatable item is melted, or if a smithingGrid is fully melted
+
 func _ready():
 	add_to_group("Items")
 	return
