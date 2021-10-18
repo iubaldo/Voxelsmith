@@ -16,4 +16,9 @@ func _init():
 
 func initPatternData() -> void:
 	# set grid bounds based on component's componentType
+	match componentType.componentType:
+		componentType.componentTypes.blade:
+			pass
 	return
+
+
