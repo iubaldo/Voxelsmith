@@ -1,22 +1,21 @@
 extends ComponentType
 class_name HandleComponent
 
-enum handleSubtypes { oh, hnh, th, medium, long }
-var handleSubtype
+enum componentSubtypes { oh, hnh, th, medium, long }
 
 
 func initGridSize() -> void:
-	match handleSubtype:
-		handleSubtypes.oh:
+	match componentSubtype:
+		componentSubtypes.oh:
 			gridSize = Vector3(3, 4, 3)
-		handleSubtypes.hnh:
+		componentSubtypes.hnh:
 			gridSize = Vector3(3, 5, 3)
-		handleSubtypes.th:
+		componentSubtypes.th:
 			gridSize = Vector3(3, 7, 3)
-		handleSubtypes.medium:
+		componentSubtypes.medium:
 			gridSize = Vector3(3, 11, 3)
-		handleSubtypes.long:
+		componentSubtypes.long:
 			gridSize = Vector3(3, 15, 3)
 		_:
-			print("handleSubtype is null or mismatch!")
+			print("componentSubtype is null or mismatch!")
 	return

@@ -80,10 +80,15 @@ func _unhandled_input(event):
 		# debug method to spawn a vallum ingot
 		if event.is_action_pressed("debug_addIngot"):
 			var newForgingMat: ForgingMaterial = Globals.createForgingMaterial(Globals.vallumTemplate.new())
-			var newIngot: Ingot = Globals.createIngot(newForgingMat)
-			
+			var newIngot: Ingot = Globals.createIngot(newForgingMat)		
 			workshopScene.freeItems.add_child(newIngot)
 			newIngot.global_transform.origin = playerCamera.global_transform.origin + playerCamera.global_transform.basis.z * -4
+		elif event.is_action_pressed("debug_spawnPattern"):
+			var newComponentType: ComponentType = Globals.createComponentType(ComponentType.componentTypes.blade, BladeComponent.componentSubtypes.ohSword)
+			var newPattern: Pattern = Globals.createPattern(newComponentType)
+			workshopScene.freeItems.add_child(newPattern)
+			newPattern.global_transform.origin = playerCamera.global_transform.origin + playerCamera.global_transform.basis.z * -4
+			pass
 		
 	# workstation activation/deactivation
 	if event.is_action_pressed("interact"):

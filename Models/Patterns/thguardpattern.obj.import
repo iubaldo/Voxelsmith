@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/thguardpattern.obj-1501372b9af68d243c939e25bd2c936f.mesh"
+
+[deps]
+
+files=[ "res://.import/thguardpattern.obj-1501372b9af68d243c939e25bd2c936f.mesh" ]
+
+source_file="res://Models/Patterns/thguardpattern.obj"
+dest_files=[ "res://.import/thguardpattern.obj-1501372b9af68d243c939e25bd2c936f.mesh", "res://.import/thguardpattern.obj-1501372b9af68d243c939e25bd2c936f.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true

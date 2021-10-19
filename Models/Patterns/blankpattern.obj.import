@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/blankpattern.obj-74d4736821bd1e7a9662de9f08f29f07.mesh"
+
+[deps]
+
+files=[ "res://.import/blankpattern.obj-74d4736821bd1e7a9662de9f08f29f07.mesh" ]
+
+source_file="res://Models/Patterns/blankpattern.obj"
+dest_files=[ "res://.import/blankpattern.obj-74d4736821bd1e7a9662de9f08f29f07.mesh", "res://.import/blankpattern.obj-74d4736821bd1e7a9662de9f08f29f07.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true

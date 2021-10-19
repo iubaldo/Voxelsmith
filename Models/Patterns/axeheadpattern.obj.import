@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/axeheadpattern.obj-a2520c24f59a39be9c215e852354374c.mesh"
+
+[deps]
+
+files=[ "res://.import/axeheadpattern.obj-a2520c24f59a39be9c215e852354374c.mesh" ]
+
+source_file="res://Models/Patterns/axeheadpattern.obj"
+dest_files=[ "res://.import/axeheadpattern.obj-a2520c24f59a39be9c215e852354374c.mesh", "res://.import/axeheadpattern.obj-a2520c24f59a39be9c215e852354374c.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true

@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/thbladepattern.obj-95830c20f45f4e40467ee7c060fb2b78.mesh"
+
+[deps]
+
+files=[ "res://.import/thbladepattern.obj-95830c20f45f4e40467ee7c060fb2b78.mesh" ]
+
+source_file="res://Models/Patterns/thbladepattern.obj"
+dest_files=[ "res://.import/thbladepattern.obj-95830c20f45f4e40467ee7c060fb2b78.mesh", "res://.import/thbladepattern.obj-95830c20f45f4e40467ee7c060fb2b78.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true

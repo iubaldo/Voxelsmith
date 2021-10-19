@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/pommelpattern.obj-6ccb11468b3504d61a7f7f2e087cb209.mesh"
+
+[deps]
+
+files=[ "res://.import/pommelpattern.obj-6ccb11468b3504d61a7f7f2e087cb209.mesh" ]
+
+source_file="res://Models/Patterns/pommelpattern.obj"
+dest_files=[ "res://.import/pommelpattern.obj-6ccb11468b3504d61a7f7f2e087cb209.mesh", "res://.import/pommelpattern.obj-6ccb11468b3504d61a7f7f2e087cb209.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true

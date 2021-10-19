@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/medhandlepattern.obj-7ea84ab0a08538cbe2c8ef184cb5a341.mesh"
+
+[deps]
+
+files=[ "res://.import/medhandlepattern.obj-7ea84ab0a08538cbe2c8ef184cb5a341.mesh" ]
+
+source_file="res://Models/Patterns/medhandlepattern.obj"
+dest_files=[ "res://.import/medhandlepattern.obj-7ea84ab0a08538cbe2c8ef184cb5a341.mesh", "res://.import/medhandlepattern.obj-7ea84ab0a08538cbe2c8ef184cb5a341.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true

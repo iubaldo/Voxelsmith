@@ -20,7 +20,31 @@ onready var componentDataTemplate = load("res://Scripts/Items/ItemData/Component
 onready var vallumTemplate = load("res://Scripts/Items/ItemData/Materials/MaterialTypes/Vallum.gd")
 
 # component types
-onready var bladeSwordComponentTemplate = load("res://Scripts/Items/ItemData/Components/ComponentTypes/BladeSwordComponent.gd")
+onready var componentTypeTemplate = load("res://Scripts/Items/ItemData/Components/ComponentType.gd")
+onready var bladeComponentTemplate = load("res://Scripts/Items/ItemData/Components/ComponentTypes/BladeComponent.gd")
+onready var guardComponentTemplate = load("res://Scripts/Items/ItemData/Components/ComponentTypes/GuardComponent.gd")
+onready var handleComponentTemplate = load("res://Scripts/Items/ItemData/Components/ComponentTypes/HandleComponent.gd")
+onready var headomponentTemplate = load("res://Scripts/Items/ItemData/Components/ComponentTypes/HeadComponent.gd")
+onready var pommelComponentTemplate = load("res://Scripts/Items/ItemData/Components/ComponentTypes/PommelComponent.gd")
+
+# pattern models
+onready var axeHeadPatternModel = load("res://Models/Patterns/axeheadpattern.obj")
+onready var blankPatternModel = load("res://Models/Patterns/blankpattern.obj")
+onready var daggerGuardPatternModel = load("res://Models/Patterns/daggerguardpattern.obj")
+onready var daggerBladePatternModel = load("res://Models/Patterns/daggerbladepattern.obj")
+onready var hammerHeadPatternModel = load("res://Models/Patterns/hammerheadpattern.obj")
+onready var hnhHandlePatternModel = load("res://Models/Patterns/hnhhandlepattern.obj")
+onready var longHandlePatternModel = load("res://Models/Patterns/longhandlepattern.obj")
+onready var maceHeadPatternModel = load("res://Models/Patterns/maceheadpattern.obj")
+onready var medHandlePatternModel = load("res://Models/Patterns/medhandlepattern.obj")
+onready var ohBladePatternModel = load("res://Models/Patterns/ohbladepattern.obj")
+onready var ohGuardPatternModel = load("res://Models/Patterns/ohguardpattern.obj")
+onready var ohHandlePatternModel = load("res://Models/Patterns/ohhandlepattern.obj")
+onready var pommelPatternModel = load("res://Models/Patterns/pommelpattern.obj")
+onready var spearBladePatternModel = load("res://Models/Patterns/spearbladepattern.obj")
+onready var thBladePatternModel = load("res://Models/Patterns/thbladepattern.obj")
+onready var thGuardPatternModel = load("res://Models/Patterns/thguardpattern.obj")
+onready var thHandlePatternModel = load("res://Models/Patterns/thhandlepattern.obj")
 
 # game data
 onready var inventoryTemplate = load("res://Scripts/Inventory/Inventory.gd")
@@ -94,12 +118,20 @@ func createIngot(forgingMat: ForgingMaterial) -> Ingot:
 func createPattern(componentType: ComponentType) -> Pattern:
 	var newPattern: Pattern = patternTemplate.instance()
 	newPattern.createItemData(componentType)
+	newPattern.setModel()
 	return newPattern
 
 func createComponent(componentType: ComponentType, forgingMat: ForgingMaterial) -> Component:
 	var newComponent: Component = componentTemplate.instance()
 	newComponent.createItemData(componentType, forgingMat)
 	return newComponent
+
+func createComponentType(componentType: int, componentSubtype: int) -> ComponentType:
+	var newComponentType: ComponentType = componentTypeTemplate.new()
+	newComponentType.componentType = componentType
+	newComponentType.componentSubtype = componentSubtype
+	newComponentType.initGridSize()
+	return newComponentType
 
 func createForgingMaterial(matType: MaterialType) -> ForgingMaterial:
 	var newForgingMat: ForgingMaterial = forgingMaterialTemplate.new()

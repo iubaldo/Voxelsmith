@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/hnhhandlepattern.obj-b4b340ecbcac51d934d03bf9dc8e474a.mesh"
+
+[deps]
+
+files=[ "res://.import/hnhhandlepattern.obj-b4b340ecbcac51d934d03bf9dc8e474a.mesh" ]
+
+source_file="res://Models/Patterns/hnhhandlepattern.obj"
+dest_files=[ "res://.import/hnhhandlepattern.obj-b4b340ecbcac51d934d03bf9dc8e474a.mesh", "res://.import/hnhhandlepattern.obj-b4b340ecbcac51d934d03bf9dc8e474a.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true

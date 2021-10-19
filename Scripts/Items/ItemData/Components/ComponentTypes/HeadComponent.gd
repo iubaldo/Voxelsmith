@@ -1,18 +1,17 @@
 extends ComponentType
 class_name HeadComponent
 
-enum headSubtypes { axe, mace, hammer }
-var headSubtype
+enum componentSubtypes { axe, mace, hammer }
 
 
 func initGridSize() -> void:
-	match headSubtype:
-		headSubtypes.axe:
+	match componentSubtype:
+		componentSubtypes.axe:
 			gridSize = Vector3(9, 3, 7)
-		headSubtypes.mace:
+		componentSubtypes.mace:
 			gridSize = Vector3(7, 7, 7)
-		headSubtypes.hammer:
+		componentSubtypes.hammer:
 			gridSize = Vector3(5, 7, 13)
 		_:
-			print("headSubtype is null or mismatch!")
+			print("componentSubtype is null or mismatch!")
 	return

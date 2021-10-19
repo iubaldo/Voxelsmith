@@ -1,18 +1,17 @@
 extends ComponentType
 class_name GuardComponent
 
-enum guardSubtypes { ohSword, thSword, dagger, polearm }
-var guardSubtype
+enum componentSubtypes { ohGuard, thGuard, daggerGuard }
 
 
 func initGridSize() -> void:
-	match guardSubtype:
-		guardSubtypes.ohSword:
+	match componentSubtype:
+		componentSubtypes.ohGuard:
 			gridSize = Vector3(3, 3, 7)
-		guardSubtypes.thSword:
+		componentSubtypes.thGuard:
 			gridSize = Vector3(3, 3, 11)
-		guardSubtypes.dagger:
+		componentSubtypes.daggerGuard:
 			gridSize = Vector3(3, 3, 5)
 		_:
-			print("guardSubtype is null or mismatch!")
+			print("componentSubtype is null or mismatch!")
 	return

@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/ohbladepattern.obj-4d4c29d1abda87eff5705e1e09eb8343.mesh"
+
+[deps]
+
+files=[ "res://.import/ohbladepattern.obj-4d4c29d1abda87eff5705e1e09eb8343.mesh" ]
+
+source_file="res://Models/Patterns/ohbladepattern.obj"
+dest_files=[ "res://.import/ohbladepattern.obj-4d4c29d1abda87eff5705e1e09eb8343.mesh", "res://.import/ohbladepattern.obj-4d4c29d1abda87eff5705e1e09eb8343.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true

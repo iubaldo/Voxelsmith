@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/longhandlepattern.obj-a4fac3043454e2a484564c1cd9a61cbd.mesh"
+
+[deps]
+
+files=[ "res://.import/longhandlepattern.obj-a4fac3043454e2a484564c1cd9a61cbd.mesh" ]
+
+source_file="res://Models/Patterns/longhandlepattern.obj"
+dest_files=[ "res://.import/longhandlepattern.obj-a4fac3043454e2a484564c1cd9a61cbd.mesh", "res://.import/longhandlepattern.obj-a4fac3043454e2a484564c1cd9a61cbd.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true

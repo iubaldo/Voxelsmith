@@ -116,10 +116,8 @@ func _unhandled_input(event):
 		# create forgingMat (would be inherited from workstationData.inventory.items[2])
 		var newForgingMat: ForgingMaterial = Globals.createForgingMaterial(Globals.vallumTemplate.new())
 		
-		# create componentType (would be inherited from workstationData.inventory.items[1])
-		var newComponentType: ComponentType = Globals.bladeSwordComponentTemplate.new()
-		newComponentType.swordSubtype = BladeSwordComponent.swordSubtypes.oneHanded
-		newComponentType.initGridSize()
+		# create componentType of type blade, ohsword (would be inherited from workstationData.inventory.items[1])
+		var newComponentType: ComponentType = Globals.createComponentType(ComponentType.componentTypes.blade, BladeComponent.componentSubtypes.ohSword)
 		
 		# create pattern (would be workstationData.inventory.items[1])
 		var newPattern: Pattern = Globals.createPattern(newComponentType)

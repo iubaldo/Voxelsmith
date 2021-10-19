@@ -4,6 +4,8 @@ class_name ComponentType
 
 enum componentTypes { blade, head, guard, handle, pommel }
 var componentType
+#enum componentSubtypes { } # virtual
+var componentSubtype
 var gridSize: Vector3 # defines the componentType's standard size
 
 
